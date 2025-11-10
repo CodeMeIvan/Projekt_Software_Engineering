@@ -1,0 +1,297 @@
+
+
+// shortend log function for faster access
+function log(message) {
+    console.log(message);
+}
+
+// run a function on selected elements
+function actionOnEachElement(elements, elementsAction) {
+    for (let i = 0; i < elements.length; i++) {
+        elementsAction(elements[i]);            
+    }
+}
+
+// --------------------switch between current tabs--------------------
+const tabItems = document.getElementsByClassName('tabs-item');
+// converting HTMLCollection to Array
+const tabItemsArray = Array.from(tabItems);
+const tabsContent = document.getElementsByClassName('tabs-content');
+
+// save current state of tab content
+let currentTab = tabItems[0];
+let currentTabContent = tabsContent[0];
+
+function switchCurrentTab(tabItem) {  
+    tabItem.addEventListener('click', (e) => {
+    // get the index of clicked tab-item
+    let tabItemIndex = tabItemsArray.indexOf(e.currentTarget);
+
+    // check if the click target is the current tab
+    if(currentTab !== e.currentTarget) {
+        currentTab.classList.toggle('current-tab');
+        currentTab = e.currentTarget;
+        e.currentTarget.classList.toggle('current-tab');
+        currentTabContent.classList.toggle('current-tab-content');
+    } else {
+        return
+    }
+    // set current tab content index equal to clicked tab-item index
+    currentTabContent = tabsContent[tabItemIndex];
+    // show current tab content
+    currentTabContent.classList.toggle('current-tab-content');
+    });
+}
+
+// run function
+actionOnEachElement(tabItems, switchCurrentTab);
+
+// --------------------switch between current tabs--------------------
+
+
+// --------------------filter main feed--------------------
+const sortContainer = document.getElementsByClassName('sort-container');
+const sortButton = document.getElementsByClassName('sort-button');
+
+// sortButton[0].addEventListener('click', (e) => {
+//     log(e.currentTarget)
+//     e.currentTarget.classList.toggle('focused');
+//     e.currentTarget.nextElementSibling.classList.toggle('hidden');
+// })
+
+// change color of current selection
+function changeColorRadioChecked(radio) {
+    radio.addEventListener('click', (e) => {
+        // check if the target isnt already selected
+        if(e.target.classList.contains('radio-container') && e.target.children[0].checked == false) {            
+            // change the color of the previous selection
+            if(e.target.parentElement.firstElementChild.innerText === "Zeitraum:") {
+                currentSortTimeline.parentElement.classList.toggle('input-checked');
+                currentSortTimeline = e.target.children[0];
+            } else {
+                currentSortOption.parentElement.classList.toggle('input-checked');
+                currentSortOption = e.target.children[0];
+            }
+            // apply color change to selection
+            e.target.classList.toggle('input-checked');                        
+        }
+    })
+}
+
+// actionOnEachElement(radioContainer, changeColorRadioChecked);
+
+// --------------------filter main feed--------------------
+
+
+// --------------------comment section--------------------
+
+const userFeedbackCommentButton = document.getElementsByClassName('user-feedback-comment');
+
+// actionOnEachElement(userFeedbackCommentButton, log);
+
+// --------------------comment section--------------------
+
+
+// --------------------like animation--------------------
+
+const animationContainer = document.getElementsByClassName('animation-container');
+
+function addAnimationToLikeButton(likeButton) {
+    likeButton.addEventListener('click', (e) => {
+        likeButton.firstElementChild.classList.toggle('hide-visibility');
+        likeButton.children[1].classList.toggle('hide-visibility');
+        likeButton.children[1].firstElementChild.classList.toggle('like-animation');
+    })
+    
+}
+
+actionOnEachElement(animationContainer, addAnimationToLikeButton);
+
+// --------------------like animation--------------------
+
+
+// --------------------auto-grow input elements--------------------
+const autoGrowElements = document.getElementsByClassName('auto-grow-element');
+
+function setElementToAutoGrow(inputElement) {
+  inputElement.addEventListener('input', (e) => {
+    // get element's border-width
+    let inputBorder = e.currentTarget.offsetHeight - e.currentTarget.clientHeight;
+    // set element's height to auto when input shrinks
+    e.currentTarget.style.height = "auto";
+    // set element's height when input grows
+    e.currentTarget.style.height = e.currentTarget.scrollHeight + inputBorder + "px";
+  })
+}
+
+actionOnEachElement(autoGrowElements, setElementToAutoGrow);
+// --------------------auto-grow input elements--------------------
+
+
+// --------------------set user profile pictures--------------------
+const userProfilePicture = document.getElementsByClassName('user-profile-picture');
+
+const profilePictureColors = ['crimson', 'darkcyan', 'darkolivegreen', 'darkmagenta', 'darkslateblue', 'darkslategrey', 'green', 'midnightblue'];
+
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+function setUserProfilePicture(user) {
+    let randomizedColor = getRndInteger(0, 7);
+    user.style.backgroundColor = profilePictureColors[randomizedColor];
+}
+
+actionOnEachElement(userProfilePicture, setUserProfilePicture);
+
+// --------------------set user profile pictures--------------------
+
+
+// --------------------set modal-content height based on post-section height--------------------
+const modalContent = document.getElementsByClassName('modal-content');
+
+function setModalContentHeight(modal) {
+    let postSectionHeight = modal.firstElementChild.clientHeight;
+
+    modal.style.height = postSectionHeight +'px';
+}
+
+actionOnEachElement(modalContent, setModalContentHeight)
+
+// --------------------set modal-content height based on post-section height--------------------
+
+
+// --------------------comment section: answer feedback--------------------
+const submitAnswer = document.getElementsByClassName('submit-answer');
+const showSolutionButton = document.getElementsByClassName('show-solution-button');
+const solutionContent = document.getElementsByClassName('solution-content');
+
+
+function showAnswerFeedback(submitAnswerButton) {
+    submitAnswerButton.addEventListener('click', (e) => {
+        // let postSectionHeight = submitAnswerButton.parentElement.parentElement.parentElement.parentElement.clientHeight;
+
+        submitAnswerButton.classList.add('hidden');
+        submitAnswerButton.parentElement.parentElement.nextElementSibling.classList.remove('hidden');
+
+        // submitAnswerButton.parentElement.parentElement.parentElement.parentElement.style.height = postSectionHeight +'px';
+    })
+
+    // submitAnswerButton.addEventListener('click', (e) => {
+    //     submitAnswerButton.parentElement.parentElement.nextElementSibling.scrollIntoView();
+    // })
+}
+
+actionOnEachElement(submitAnswer, showAnswerFeedback);
+
+function showSolution(solutionButton) {
+    solutionButton.addEventListener('click', (e) => {
+        if(solutionButton.parentElement.nextElementSibling.classList.contains('hidden')) {
+            log('is hidden')
+            solutionButton.firstElementChild.style.transform = 'rotate(180deg)';
+        } else {
+            solutionButton.firstElementChild.style.transform = 'rotate(0deg)';
+        }
+
+        log(solutionButton)
+        let postSectionHeight = solutionButton.parentElement.parentElement.parentElement.parentElement.clientHeight;
+
+        solutionButton.parentElement.nextElementSibling.classList.toggle('hidden');
+        
+        solutionButton.parentElement.parentElement.parentElement.parentElement.style.height = postSectionHeight +'px';
+    })
+
+    solutionButton.addEventListener('click', (e) => {
+        solutionButton.parentElement.nextElementSibling.scrollIntoView();
+    })
+}
+
+actionOnEachElement(showSolutionButton, showSolution);
+
+// --------------------comment section: answer feedback--------------------
+
+// --------------------add_new_question: cancel progress and go back--------------------
+const alertCancelButton = document.getElementsByClassName('alert-cancel-button');
+const alertConfirmButton = document.getElementsByClassName('alert-confirm-button');
+
+function closeModal(modal) {    
+    modal.addEventListener('click', (e) => {
+        if(e.target === modal) {
+            modal.style.display = 'none';
+        }
+    })
+}
+
+function negativeConfirmation(event) {
+    event.currentTarget.parentElement.parentElement.parentElement.style.display = 'none';
+    }
+
+function positiveConfirmation(event) {
+    if(history.length > 1) {
+        history.go(-1);
+    } else {
+        location.assign('home.html');
+    }
+}
+
+
+
+function cancelPostCreation() {
+    const alertWarning = document.body.firstElementChild;
+    alertWarning.style.display = 'flex';
+    
+    closeModal(alertWarning);
+}
+
+// --------------------add_new_question: cancel progress and go back--------------------
+
+
+// --------------------add_new_question: add additional answer option--------------------
+const possibleAnswersContainer = document.getElementsByClassName('possible-answers-container');
+
+// get the number of possible answers
+let currentNumberOfOptions = 2;
+
+// highlight selected answer
+function highlightCorrectAnswer(checkbox) {
+    checkbox.classList.toggle('possible-answer-checked');
+}
+// event delegation: container listens for the changed checkbox
+possibleAnswersContainer[0].addEventListener('change', (e) => {
+    if(e.target.matches('.possible-answer-checkbox')) {
+        highlightCorrectAnswer(e.target.parentElement.parentElement);
+    }
+})
+
+possibleAnswersContainer[0].addEventListener('input', (e) => {
+    if(e.target.matches('.auto-grow-element')) {
+        const autoGrowElement = e.target;
+        // get element's border-width
+        let inputBorder = autoGrowElement.offsetHeight - autoGrowElement.clientHeight;
+        // set element's height to auto when input shrinks
+        autoGrowElement.style.height = "auto";
+        // set element's height when input grows
+        autoGrowElement.style.height = autoGrowElement.scrollHeight + inputBorder + "px";
+    }
+})
+
+// when the button is clicked add another answer
+function addAnswerOption() {
+    // check before adding answer option, max number of options is 4
+    if(currentNumberOfOptions < 4) {
+        let answerOption = `
+        <div class="possible-answer">
+            <label for="answer-${currentNumberOfOptions + 1}" class="checkmark-container" title="Wählen Sie die richtige Antwort aus">
+                <input type="checkbox" name="answer-${currentNumberOfOptions + 1}" id="answer-${currentNumberOfOptions + 1}" class="possible-answer-checkbox">
+                <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+            </label>
+            <textarea name="" id="answer-${currentNumberOfOptions + 1}-input" class="possible-answer-input auto-grow-element" rows="1" placeholder="Antwort ${currentNumberOfOptions + 1}"></textarea>
+        </div>
+        `;
+        possibleAnswersContainer[0].insertAdjacentHTML("beforeend", answerOption);
+    
+        currentNumberOfOptions++;
+    }
+}
+
+// --------------------add_new_question: add additional answer option--------------------

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="40"
+   height="40"
+   viewBox="0 0 10.583333 10.583333"
+   version="1.1"
+   id="svg218811"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   sodipodi:docname="Projekt_logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview218813"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="7.2466939"
+     inkscape:cx="59.889379"
+     inkscape:cy="25.459886"
+     inkscape:current-layer="layer1"
+     units="px" />
+  <defs
+     id="defs218808" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="rect169634"
+       style="fill:#f0f0f0;fill-opacity:1;stroke-width:0.301001;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:10;paint-order:markers fill stroke"
+       d="M 2.1166665,0 C 0.94403318,0 -1e-7,0.944033 -1e-7,2.116667 v 6.35 c 0,1.172633 0.94403328,2.116666 2.1166666,2.116666 h 6.3499999 c 1.1726333,0 2.1166666,-0.944033 2.1166666,-2.116666 v -6.35 C 10.583333,0.944033 9.6392997,0 8.4666664,0 Z M 1.9275291,2.539378 8.2573757,2.961058 8.5658852,8.658386 7.0760535,7.539075 2.1404367,7.260021 1.9564692,3.154328 Z M 3.0814643,3.718634 3.1951531,6.216674 7.3452882,6.451285 7.2124779,3.994071 Z" />
+  </g>
+</svg>

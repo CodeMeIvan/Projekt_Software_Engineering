@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="style/main-style.css">
+      <script src="main.js" defer></script>
+      <link rel="shortcut icon" href="icons/app_logo.svg" type="image/x-icon">
+      <title>Startseite</title>
+  </head>
+  <body class="flex-container justify-center align-center">
+    <header class="main-header flex-container justify-between align-center">
+      <div id="app-logo" class="app-logo app-logo--header flex-container align-center gap-1"><img src="icons/app_logo.svg" alt="Logo" srcset="" style="height: 1.75rem;">IUnity</div>
+      <div class="search-bar">
+        <i class="search-icon material-icons">search</i>
+        <input type="search" name="search-input" id="search-input" class="search-input input-field" placeholder="Fach suchen">
+      </div>
+      <button type="button"><a href="add_new_question.html" class="button-secondary button-combo"><i class="material-icons">library_add</i>Frage stellen</a></button>
+    </header>
+    <nav class="main-nav flex-container flex-column justify-between">
+      <div class="flex-container flex-column gap-1">
+        <a href="#" class="nav-li current-page">Startseite</a>
+        <a href="#" class="nav-li">Entdecken</a>
+        <a href="#" class="nav-li">Meine Fragen</a>
+        <a href="#" class="nav-li">Favoriten</a>
+      </div>
+      <div class="flex-container flex-column gap-1">
+        <a href="settings.html" class="nav-li flex-container align-center gap-1"><i class="material-icons" style="color: inherit;">settings</i>Einstellungen</a>
+        <button type="button" class="nav-li flex-container align-center gap-1"><i class="material-icons" style="color: inherit;">exit_to_app</i>Abmelden</button>
+      </div>
+    </nav>
+    <main class="main-content flex-container flex-column">
+      <div class="tabs flex-container flex-column gap-2">
+        <ul id="tabs-list" class="tabs-list">
+          <li class="tabs-item current-tab">Bachelor</li>
+          <li class="tabs-item">Master</li>
+        </ul>
+        <div class="tabs-content current-tab-content gap-2">
+          <div class="content-filter-container">
+            <div class="sort-container">
+              <button type="button" class="sort-button button-combo"><i class="material-icons" style="font-size: 28px;">sort</i>Sortieren</button>
+              <div class="sort-content hidden">
+                <form id="sort-feed" class="flex-container gap-2">
+                    <div class="form-field">
+                        <div class="form-field-description">Sortieren nach:</div>
+                        <label for="sort-by-newest" class="radio-container input-checked">Neueste zuerst
+                            <input type="radio" name="sort-by" id="sort-by-newest" checked>
+                            <span class="custom-checkmark"></span>
+                        </label>
+                        <label for="sort-by-oldest" class="radio-container">Älteste zuerst
+                            <input type="radio" name="sort-by" id="sort-by-oldest">
+                            <span class="custom-checkmark"></span>
+                        </label>
+                        <label for="sort-by-likes" class="radio-container">Meisten Likes
+                            <input type="radio" name="sort-by" id="sort-by-likes">
+                            <span class="custom-checkmark"></span>
+                        </label>
+                        <label for="sort-by-comments" class="radio-container">Meisten Kommentare
+                            <input type="radio" name="sort-by" id="sort-by-comments">
+                            <span class="custom-checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="form-field">
+                        <div class="form-field-description">Zeitraum:</div>
+                        <label for="time-period-24h" class="radio-container input-checked">24 Stunden
+                            <input type="radio" name="time-period" id="time-period-24h" checked>
+                            <span class="custom-checkmark"></span>
+                        </label>
+                        <label for="time-period-1m" class="radio-container">1 Monat
+                            <input type="radio" name="time-period" id="time-period-1m">
+                            <span class="custom-checkmark"></span>
+                        </label>
+                        <label for="time-period-1y" class="radio-container">1 Jahr
+                            <input type="radio" name="time-period" id="time-period-1y">
+                            <span class="custom-checkmark"></span>
+                        </label>
+                        <label for="time-period-alltime" class="radio-container">Aller Zeiten
+                            <input type="radio" name="time-period" id="time-period-alltime">
+                            <span class="custom-checkmark"></span>
+                        </label>
+                    </div>                    
+                </form>
+                <button id="apply-filter-button" class="button-secondary">Änderungen anwenden</button>
+              </div>
+            </div>
+            <!-- <select name="" id="" class="select-input">
+              <optgroup label="Welcher Studiengang interessiert dich?">
+                <option value="alle" class="select-option">Alle Studiengänge</option>                
+                <option value="mathematik" class="select-option">Mathematik</option>                
+                <option value="wirtschaftsinformatik" class="select-option">Wirtschaftsinformatik</option>                
+              </optgroup>
+            </select> -->
+          </div>
+          <div class="divider"></div>
+          <div class="posts-feed">
+            <article class="post">
+              <div class="post-info">
+                <div class="post-specifications">
+                  <div class="course-name link">k/Requirements Engineering</div>
+                  <span>&#128900;</span>
+                  <div class="post-date">14 min</div>
+                  <!-- <span>&#128900;</span> -->
+                  <!-- <div class="button-ghost">Folgen</div> -->
+                </div>
+                <div class="post-menu button-icon"><i class="material-icons">more_horiz</i></div>
+              </div>
+              <div class="post-card">
+                <header class="post-card-header">
+                  <h2 class="post-heading">Du möchtest den Systemüberblick für deinen Projektmanager dokumentieren. Für welches UML-Diagramm entscheidest du dich?</h2>
+                </header>
+                <div class="post-card-content">
+                  <form class="post-answers">
+                    <div class="post-card-question-type">Multiple-Choice:</div>
+                    <div class="answer-options-container">
+                      <label for="answer-option-1" class="answer-option checkmark-label">
+                        <input type="checkbox" name="answer-option-1" id="answer-option-1" class="answer-option-input">
+                        <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+                        <p class="answer-option-content checkmark-label-content">Objektdiagramm</p>
+                      </label>
+                      <label for="answer-option-2" class="answer-option checkmark-label answer-option-selected">
+                        <input type="checkbox" name="answer-option-2" id="answer-option-2" class="answer-option-input">
+                        <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+                        <p class="answer-option-content checkmark-label-content">Use-Case-Diagramm</p>
+                      </label>
+                      <label for="answer-option-3" class="answer-option checkmark-label">
+                        <input type="checkbox" name="answer-option-3" id="answer-option-3" class="answer-option-input">
+                        <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+                        <p class="answer-option-content checkmark-label-content">Klassendiagramm</p>
+                      </label>
+                      <label for="answer-option-4" class="answer-option checkmark-label">
+                        <input type="checkbox" name="answer-option-4" id="answer-option-4" class="answer-option-input">
+                        <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+                        <p class="answer-option-content checkmark-label-content">Sequenzdiagramm</p>
+                      </label>
+                    </div>
+                  </form>
+                  <button type="submit" class="submit-answer-button button-primary">Auswerten</button>
+                </div>
+                <div class="divider"></div>
+                <div class="post-card-footer">
+                  <div class="flex-container align-center gap-0">
+                    <button class="user-feedback-button">
+                      <div class="button-icon"><i class="material-icons">favorite_border</i></div>
+                      <span class="user-feedback-counter">21</span>
+                    </button>                  
+                    <button class="user-feedback-button">
+                      <div class="button-icon"><i class="material-icons">chat_bubble_outline</i></div>
+                      <span class="user-feedback-counter">4</span>
+                    </button>                  
+                  </div>                                  
+                  <button class="user-feedback-button button-icon"><i class="material-icons">bookmark_border</i></button>
+                </div>
+              </div>
+            </article>
+            <div class="divider"></div>
+            <article class="post">
+              <div class="post-info">
+                <div class="post-specifications">
+                  <div class="course-name link">k/Gestaltung und Ergonomie von User Interfaces</div>
+                  <span>&#128900;</span>
+                  <div class="post-date">21 min</div>
+                  <!-- <span>&#128900;</span> -->
+                  <!-- <div class="button-ghost">Folgen</div> -->
+                </div>
+                <div class="post-menu button-icon"><i class="material-icons">more_horiz</i></div>
+              </div>
+              <div class="post-card">
+                <header class="post-card-header">
+                  <h2 class="post-heading">Als Webdesigner hast du den Auftrag erhalten, eine Onlinepräsenz für das Rathaus deines Ortes zu entwerfen. Welcher der folgenden Punkte sind bei der Gestaltung rechtlich bindend?</h2>
+                </header>
+                <div class="post-card-content">
+                  <form class="post-answers">
+                    <div class="post-card-question-type">Multiple-Choice:</div>
+                    <div class="answer-options-container">
+                      <label for="answer-option-1" class="answer-option checkmark-label">
+                        <input type="checkbox" name="answer-option-1" id="answer-option-1" class="answer-option-input">
+                        <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+                        <p class="answer-option-content checkmark-label-content">Responsive Design</p>
+                      </label>
+                      <label for="answer-option-2" class="answer-option checkmark-label">
+                        <input type="checkbox" name="answer-option-2" id="answer-option-2" class="answer-option-input">
+                        <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+                        <p class="answer-option-content checkmark-label-content">Flat Design</p>
+                      </label>
+                      <label for="answer-option-3" class="answer-option checkmark-label">
+                        <input type="checkbox" name="answer-option-3" id="answer-option-3" class="answer-option-input">
+                        <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+                        <p class="answer-option-content checkmark-label-content">Barrierefreiheit</p>
+                      </label>
+                      <label for="answer-option-4" class="answer-option checkmark-label">
+                        <input type="checkbox" name="answer-option-4" id="answer-option-4" class="answer-option-input">
+                        <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+                        <p class="answer-option-content checkmark-label-content">Natural Mapping</p>
+                      </label>
+                    </div>
+                  </form>
+                  <button type="submit" class="submit-answer-button button-primary">Auswerten</button>
+                </div>
+                <div class="divider"></div>
+                <div class="post-card-footer">
+                  <div class="flex-container align-center gap-0">
+                    <button class="user-feedback-button">
+                      <div class="button-icon"><i class="material-icons">favorite_border</i></div>
+                      <span class="user-feedback-counter">34</span>
+                    </button>                  
+                    <button class="user-feedback-button">
+                      <div class="button-icon"><i class="material-icons">chat_bubble_outline</i></div>
+                      <span class="user-feedback-counter">2</span>
+                    </button>                  
+                  </div>                                  
+                  <button class="user-feedback-button button-icon"><i class="material-icons">bookmark_border</i></button>
+                </div>
+              </div>
+            </article>
+          </div>         
+        </div>
+        <div class="tabs-content gap-2">
+          Dieser Bereich ist in Bearbeitung
+      </div>
+    </main>
+  </body>
+  <script>
+
+    // execute a function on selected elements
+    function actionOnEachElement(elements, elementsAction) {
+        for (let i = 0; i < elements.length; i++) {
+            elementsAction(elements[i]);            
+        }
+    }
+
+// --------------------disable scrolling--------------------
+
+    let scrollingEnabled = true;
+
+    function disableScroll() {
+    // Get the current page scroll position
+    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+
+    // if any scroll is attempted,
+    // set this to the previous value
+    window.onscroll = function () {
+      window.scrollTo(scrollLeft, scrollTop);
+      log('scroll is triggered');
+    };
+  }
+
+  function enableScroll() {
+    window.onscroll = function () { };
+  }
+
+// --------------------disable scrolling--------------------
+
+
+// --------------------switch between current tabs--------------------
+  
+
+// --------------------switch between current tabs--------------------
+
+
+// --------------------filter main feed--------------------
+const filterPopover = document.getElementById('filter-popover');
+const popoverCloser = document.getElementById('popover-closer');
+const filterButton = document.getElementById('filter-button');
+const applyFilterButton = document.getElementById('apply-filter-button');
+const radioContainer = document.getElementsByClassName('radio-container');
+
+let currentSortOption = document.getElementById('sort-by-newest');
+let currentSortTimeline = document.getElementById('time-period-24h');
+
+// open and close popover when "filter button" is clicked
+filterButton.addEventListener('click', () => {
+    filterPopover.classList.toggle('visible');
+    popoverCloser.classList.toggle('hidden');
+
+    disableScroll();
+    scrollingEnabled = false;
+
+})
+
+// open and close popover when "apply changes button" is clicked
+applyFilterButton.addEventListener('click', () => {
+    filterPopover.classList.toggle('visible');
+    popoverCloser.classList.toggle('hidden');
+
+    enableScroll();
+    scrollingEnabled = true;
+})
+
+// close popover when user clicks outside the popover
+popoverCloser.addEventListener('click', () => {
+    filterPopover.classList.toggle('visible');
+    popoverCloser.classList.toggle('hidden');
+
+    enableScroll();
+    scrollingEnabled = true;
+})
+
+// change color of current selection
+function changeColorRadioChecked(radio) {
+    radio.addEventListener('click', (e) => {
+        // check if the target isnt already selected
+        if(e.target.classList.contains('radio-container') && e.target.children[0].checked == false) {            
+            // change the color of the previous selection
+            if(e.target.parentElement.firstElementChild.innerText === "Zeitraum:") {
+                currentSortTimeline.parentElement.classList.toggle('input-checked');
+                currentSortTimeline = e.target.children[0];
+            } else {
+                currentSortOption.parentElement.classList.toggle('input-checked');
+                currentSortOption = e.target.children[0];
+            }
+            // apply color change to selection
+            e.target.classList.toggle('input-checked');                        
+        }
+    })
+}
+
+actionOnEachElement(radioContainer, changeColorRadioChecked);
+
+// --------------------filter main feed--------------------
+  </script>
+</html>

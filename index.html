@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="style/main-style.css">
+      <script src="main.js" defer></script>
+      <link rel="shortcut icon" href="icons/app_logo.svg" type="image/x-icon">
+      <title>Willkommen bei IUnity</title>
+  </head>
+  <body>
+    <main class="register-and-login-main flex-container justify-center">
+      <div class="login-container">
+        <div class="app-logo app-logo--login flex-container align-center gap-1"><img src="icons/app_logo.svg" alt="Logo" srcset="" style="height: 2rem;">IUnity</div>
+        <div class="form-container flex-container flex-column gap-4">
+          <h1 class="form-heading">Bei Ihrem Konto anmelden</h1>
+          <form action="" class="flex-container flex-column gap-3">
+            <div class="form-field">
+                <label for="login-e-mail" class="form-field-label">E-Mail-Adresse</label>
+                <input type="email" name="" id="login-e-mail" class="input-field" autofocus required>
+                <!-- <p class="input-field-description input-field-error-message">Ungültige E-Mail-Adresse</p> -->
+              </div>
+              <div class="form-field">
+                <div class="flex-container justify-between">
+                  <label for="login-password" class="form-field-label">Passwort</label>
+                  <a href="password_reset.html" class="button-ghost">Passwort vergessen?</a>
+                </div>
+                <input type="password" name="" id="login-password" class="input-field" required>            
+                <!-- <p class="input-field-description input-field-error-message">Ungültiges Passwort</p> -->
+            </div>
+            <button type="submit" class="m-top"><a href="home.html" class="button-primary w-fill">Anmelden</a></button>
+            <div class="flex-container align-center gap-3">
+              <div class="divider"></div>
+              <span class="divider-description">oder</span>
+              <div class="divider"></div>
+            </div>
+            <div class="flex-container flex-column gap-2">
+              <button type="button" class="button-secondary">Mit IU-Konto anmelden</button>
+              <button type="button" class="button-tertiary">Mit Google-Konto anmelden</button>
+            </div>
+          </form>
+          <div class="login-register-link">
+            Noch kein Mitglied bei IUnity?
+            <a href="registration.html" class="button-ghost">Registrieren</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

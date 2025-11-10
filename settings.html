@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="style/main-style.css">
+      <script src="main.js" defer></script>
+      <link rel="shortcut icon" href="icons/app_logo.svg" type="image/x-icon">
+      <title>IUnity - Einstellungen</title>
+  </head>
+  <body class="settings-page">
+    <main class="settings-page-main">
+      <div class="flex-container flex-column gap-1">
+        <h1 class="page-heading">Einstellungen</h1>
+        <!-- <p class="page-description">Hier können Sie Ihre Nutzerdaten und Systemeinstellungen aktualisieren</p> -->
+      </div>
+      <div class="tabs flex-container flex-column gap-1">
+            <ul id="tabs-list" class="tabs-list">
+                <li class="tabs-item current-tab">Mein Profil</li>
+                <li class="tabs-item">Systemeinstellungen</li>
+            </ul>
+            <div class="tabs-content current-tab-content">
+              <form class="form-container flex-container flex-column gap-4">
+                <div class="form-field">
+                  <label for="" class="form-field-label">Mein Profilbild</label>
+                  <input type="file" name="" id="" class="input-field">
+                </div>          
+                <div class="form-field">
+                  <label for="" class="form-field-label">Passwort ändern</label>
+                  <input type="password" name="" id="" class="input-field" placeholder="Geben Sie Ihr neues Passwort ein">
+                </div>          
+                <div class="form-field">
+                  <label for="" class="form-field-label">E-Mail-Adresse ändern</label>
+                  <input type="email" name="" id="" class="input-field" placeholder="Geben Sie Ihre neue E-Mail-Adresse an">
+                </div>          
+                <div class="flex-container justify-center align-center gap-2 m-top">
+                  <button class="button-tertiary">Abbrechen</button>
+                  <button type="submit" class="button-primary">Änderungen übernehmen</button>
+                </div>
+              </form>
+            </div>
+            <div class="tabs-content">
+              <form class="form-container flex-container flex-column gap-4">
+                <div class="form-field">
+                  <p for="" class="form-field-label">Systemdesign</p>
+                  <label for="dark-mode" class="system-design-option checkmark-label">
+                    <input type="radio" name="system-design" id="dark-mode" class="system-design-input" checked>
+                    <span class="custom-checkmark" title="Wählen Sie das Systemdesign"></span>
+                    <p class="checkmark-label-content">Dunkel</p>
+                  </label>
+                  <label for="light-mode" class="system-design-option checkmark-label">
+                    <input type="radio" name="system-design" id="light-mode" class="system-design-input">
+                    <span class="custom-checkmark" title="Wählen Sie das Systemdesign"></span>
+                    <p class="checkmark-label-content">Hell</p>
+                  </label>
+                </div>          
+                <div class="form-field">
+                  <label for="" class="form-field-label">Systemsprache auswählen</label>
+                  <select name="" id="" class="select-input">
+                    <option value="german" class="select-option">Deutsch</option>                
+                    <option value="english" class="select-option">Englisch</option>                                  
+                  </select>
+                </div>          
+                <div class="form-field">
+                  <label for="system-notifications" class="checkbox-label">
+                    <input type="checkbox" value="system-notifications" id="system-notifications">
+                    <span class="custom-checkbox"></span>
+                    Systembenachrichtigungen zulassen
+                  </label>                  
+                </div>          
+                <div class="flex-container justify-center align-center gap-2 m-top">
+                  <button class="button-tertiary">Abbrechen</button>
+                  <button type="submit" class="button-primary">Änderungen übernehmen</button>
+                </div>
+              </form>
+            </div>
+        </div>
+    </main>
+  </body>
+</html>
