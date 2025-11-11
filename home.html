@@ -8,7 +8,8 @@
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="style/main-style.css">
-      <script src="main.js" defer></script>
+      <!-- <script src="main.js" defer></script> -->
+      <script src="database-dummy.js" defer></script>
       <link rel="shortcut icon" href="icons/app_logo.svg" type="image/x-icon">
       <title>Startseite</title>
   </head>
@@ -96,15 +97,15 @@
             </select> -->
           </div>
           <div class="divider"></div>
-          <div class="posts-feed">
-            <article class="post">
+          <div id="posts-feed" class="posts-feed">
+            <!-- <article class="post">
               <div class="post-info">
                 <div class="post-specifications">
                   <div class="course-name link">k/Requirements Engineering</div>
                   <span>&#128900;</span>
                   <div class="post-date">14 min</div>
-                  <!-- <span>&#128900;</span> -->
-                  <!-- <div class="button-ghost">Folgen</div> -->
+                  <span>&#128900;</span>
+                  <div class="button-ghost">Folgen</div>
                 </div>
                 <div class="post-menu button-icon"><i class="material-icons">more_horiz</i></div>
               </div>
@@ -155,16 +156,16 @@
                   <button class="user-feedback-button button-icon"><i class="material-icons">bookmark_border</i></button>
                 </div>
               </div>
-            </article>
-            <div class="divider"></div>
-            <article class="post">
+            </article> -->
+            <!-- <div class="divider"></div> -->
+            <!-- <article class="post">
               <div class="post-info">
                 <div class="post-specifications">
                   <div class="course-name link">k/Gestaltung und Ergonomie von User Interfaces</div>
                   <span>&#128900;</span>
                   <div class="post-date">21 min</div>
-                  <!-- <span>&#128900;</span> -->
-                  <!-- <div class="button-ghost">Folgen</div> -->
+                  <span>&#128900;</span>
+                  <div class="button-ghost">Folgen</div>
                 </div>
                 <div class="post-menu button-icon"><i class="material-icons">more_horiz</i></div>
               </div>
@@ -215,7 +216,7 @@
                   <button class="user-feedback-button button-icon"><i class="material-icons">bookmark_border</i></button>
                 </div>
               </div>
-            </article>
+            </article> -->
           </div>         
         </div>
         <div class="tabs-content gap-2">
@@ -272,33 +273,39 @@ const radioContainer = document.getElementsByClassName('radio-container');
 let currentSortOption = document.getElementById('sort-by-newest');
 let currentSortTimeline = document.getElementById('time-period-24h');
 
-// open and close popover when "filter button" is clicked
-filterButton.addEventListener('click', () => {
-    filterPopover.classList.toggle('visible');
-    popoverCloser.classList.toggle('hidden');
+// try {
+//   open and close popover when "filter button" is clicked
+//   filterButton.addEventListener('click', () => {
+//       filterPopover.classList.toggle('visible');
+//       popoverCloser.classList.toggle('hidden');
+  
+//       disableScroll();
+//       scrollingEnabled = false;
+  
+//   })
+  
+//   open and close popover when "apply changes button" is clicked
+//   applyFilterButton.addEventListener('click', () => {
+//       filterPopover.classList.toggle('visible');
+//       popoverCloser.classList.toggle('hidden');
+  
+//       enableScroll();
+//       scrollingEnabled = true;
+//   })
+  
+//   close popover when user clicks outside the popover
+//   popoverCloser.addEventListener('click', () => {
+//       filterPopover.classList.toggle('visible');
+//       popoverCloser.classList.toggle('hidden');
+  
+//       enableScroll();
+//       scrollingEnabled = true;
+//   })
+  
+// } catch (error) {
+//   console.log(error)  
+// }
 
-    disableScroll();
-    scrollingEnabled = false;
-
-})
-
-// open and close popover when "apply changes button" is clicked
-applyFilterButton.addEventListener('click', () => {
-    filterPopover.classList.toggle('visible');
-    popoverCloser.classList.toggle('hidden');
-
-    enableScroll();
-    scrollingEnabled = true;
-})
-
-// close popover when user clicks outside the popover
-popoverCloser.addEventListener('click', () => {
-    filterPopover.classList.toggle('visible');
-    popoverCloser.classList.toggle('hidden');
-
-    enableScroll();
-    scrollingEnabled = true;
-})
 
 // change color of current selection
 function changeColorRadioChecked(radio) {

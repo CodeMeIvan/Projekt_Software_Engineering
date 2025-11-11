@@ -8,7 +8,6 @@
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="style/main-style.css">
-      <script src="main.js" defer></script>
       <link rel="shortcut icon" href="icons/app_logo.svg" type="image/x-icon">
       <title>IUnity - Neues Konto erstellen</title>
   </head>
@@ -21,28 +20,19 @@
           <form action="" class="flex-container flex-column gap-3">
             <div class="form-field">
                 <label for="registration-e-mail" class="form-field-label">E-Mail-Adresse</label>
-                <input type="email" name="" id="registration-e-mail" class="input-field">
+                <input type="email" name="" id="registration-e-mail" class="input-field" required>
             </div>
             <div class="form-field">
                 <label for="registration-username" class="form-field-label">Benutzername</label>
-                <input type="text" name="" id="registration-username" class="input-field">
+                <input type="text" name="" id="registration-username" class="input-field" required>
                 <p class="input-field-description">Dieser Name ist für andere Nutzer der Plattform sichtbar</p>
             </div>
             <div class="form-field">
                 <label for="registration-password" class="form-field-label">Passwort</label>
-                <input type="password" name="" id="registration-password" class="input-field">
+                <input type="password" name="" id="registration-password" class="input-field" required>
                 <p class="input-field-description">Passwortlänge mind. 12 Zeichen</p>         
             </div>
-            <button type="submit" class="button-primary m-top"><a href="home.html">Konto einrichten</a></button>
-            <!-- <div class="flex-container align-center gap-3">
-              <div class="divider"></div>
-              <span class="divider-description">oder</span>
-              <div class="divider"></div>
-            </div>
-            <div class="flex-container flex-column gap-2">
-              <button type="button" class="button-secondary">Mit IU-Account anmelden</button>
-              <button type="button" class="button-tertiary">Mit Google anmelden</button>
-            </div> -->
+            <button type="submit" class="button-primary m-top">Konto einrichten</button>          
           </form>
           <div class="login-register-link">
             Sie haben schon ein Konto?

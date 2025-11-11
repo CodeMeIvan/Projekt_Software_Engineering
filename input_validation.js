@@ -9,6 +9,7 @@ const loginEmail = document.querySelector("#login-e-mail");
 const loginPassword = document.querySelector("#login-password");
 
 let errorMessageActive = false;
+let inputFieldError;
 let inputFieldErrorMessage;
 
 loginForm.addEventListener('submit', (e) => {
@@ -32,22 +33,33 @@ loginForm.addEventListener('submit', (e) => {
 
 
   if(errorMessageActive) {
+    inputFieldError.classList.toggle('input-field-error');
     inputFieldErrorMessage.classList.toggle('hidden');
     errorMessageActive = false;
   }
   
   if(!validEmail) {
     errorMessageActive = true;
+    inputFieldError = loginEmail;
     inputFieldErrorMessage = loginEmail.nextElementSibling;
-    loginEmail.nextElementSibling.classList.toggle('hidden');
+
+    inputFieldError.classList.toggle('input-field-error');
+    inputFieldErrorMessage.classList.toggle('hidden');
   } 
   else if(validUser.password !== userPassword) {
     errorMessageActive = true;
-    inputFieldErrorMessage = loginPassword.nextElementSibling; 
-    loginPassword.nextElementSibling.classList.toggle('hidden');
+    inputFieldError = loginPassword;
+    inputFieldErrorMessage = loginPassword.nextElementSibling;
+
+    inputFieldError.classList.toggle('input-field-error');
+    inputFieldErrorMessage.classList.toggle('hidden');
   } else {
     location.assign('home.html');
   }
-
-  
 })
+
+loginPassword.addEventListener('click', (e) => {
+  if(e.currentTarget === inputFieldError) {
+    inputFieldError.value = "";    
+  }
+});
