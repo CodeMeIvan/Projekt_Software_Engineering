@@ -92,7 +92,7 @@ const userFeedbackCommentButton = document.getElementsByClassName('user-feedback
 // --------------------comment section--------------------
 
 
-// --------------------like animation--------------------
+// <<--------------------like animation--------------------
 
 const animationContainer = document.getElementsByClassName('animation-container');
 
@@ -107,7 +107,7 @@ function addAnimationToLikeButton(likeButton) {
 
 actionOnEachElement(animationContainer, addAnimationToLikeButton);
 
-// --------------------like animation--------------------
+// --------------------like animation-------------------->>
 
 
 // --------------------auto-grow input elements--------------------

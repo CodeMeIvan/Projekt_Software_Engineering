@@ -1,7 +1,7 @@
 const posts = [
   {
     postID: "post-1",
-    postDate: "12.10.25",
+    postDate: "2025-10-29T14:00:00",
     author: "Max Mustermann",
     subject: "B.Sc. Informatik",
     course: "Requirements Engineering",
@@ -32,7 +32,7 @@ const posts = [
     postDate: "12.10.25",
     author: "Max Mustermann",
     subject: "B.Sc. Informatik",
-    course: "Requirements Engineering",
+    course: "IU Design",
     questionType: "Multiple-Choice",
     question: "Du möchtest den Systemüberblick für deinen Projektmanager dokumentieren. Für welches UML-Diagramm entscheidest du dich?", 
     answers: ["Objektdiagramm", "Use-Case-Diagramm", "Klassendiagramm"], 
@@ -59,7 +59,7 @@ const posts = [
 ];
 
 
-const myFollowList = ['Informatik', 'Wirtschaftsinformatik'];
+const myFollowList = ['Requirements Engineering', 'Wissenschaftliches Arbeiten'];
 
 const myFavorites = [{post: 1}, {post: 2}];
 
@@ -74,7 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
   posts.forEach((post) => {
     let answerName = 1;
 
+    // options array
     let answerContent = [];
+    // push answer options into answerContent array
     post.answers.forEach((answer) => {
       let answerOption = `
       <label for="answer-option-${answerID}" class="answer-option checkmark-label">
@@ -88,20 +90,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
       answerContent.push(answerOption)
     });
-
+    // join answer options into a single string for rendering
     let answerOptionsContent = answerContent.join("");
 
-    let postTime;
+    // check if the user follows post.course
+    let courseFollowed = myFollowList.includes(post.course);
+    // follow button is rendered when course is not followed
+    function renderFollowButton(followStatus) {
+      let followButton = "";
+      
+      if(followStatus) {                      
+        followButton = `
+        <span>&#128900;</span>
+        <div class="button-ghost" onclick="followCourse(event)">Folgen</div>                      
+        `;
+      }
+      return followButton                    
+    }
 
+
+    function timeSince(date) {
+      const seconds = Math.floor((new Date() - date) / 1000);
+
+      const intervals = [
+        { label: "Jahr", seconds: 31536000 },
+        { label: "Monat", seconds: 2592000 },
+        { label: "Tag", seconds: 86400 },
+        { label: "Stunde", seconds: 3600 },
+        { label: "Minute", seconds: 60 },
+        { label: "Sekunde", seconds: 1 }
+      ];
+
+      for (const interval of intervals) {
+        const count = Math.floor(seconds / interval.seconds);
+        if (count >= 1) {
+          return `vor ${count} ${interval.label}${count > 1 ? "n" : ""}`;
+        }
+      }
+        return "gerade eben";
+    }
+    
     let postContent = `
       <article id="${post.postID}" class="post">
               <div class="post-info">
                 <div class="post-specifications">
-                  <div class="course-name link">k/${post.course}</div>
+                  <div class="course-name link" data-course-name="${post.course}">k/${post.course}</div>
                   <span>&#128900;</span>
-                  <div class="post-date">${post.postDate}</div>
-                  <!-- <span>&#128900;</span> -->
-                  <!-- <div class="button-ghost">Folgen</div> -->
+                  <div class="post-date">${timeSince(post.postDate)}</div>
+                  ${renderFollowButton(!courseFollowed)}
                 </div>
                 <div class="post-menu button-icon"><i class="material-icons">more_horiz</i></div>
               </div>
@@ -140,3 +176,17 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 })
 
+// follow button adds a course to myFollowList
+function followCourse(e) {
+  // get course name
+  let courseName = e.currentTarget.parentElement.firstElementChild.attributes[1].textContent;
+  // check whether course is followed (safety measurement, because follow buttons should only be rendered when course is not followed)
+  let followed = myFollowList.includes(courseName);
+  // add course to myFollowList and deactivate follow button
+  if(!followed) {
+    myFollowList.push(courseName);
+    e.target.innerText = "Gefolgt";
+    e.target.classList.add('button--inactive');
+  }
+
+}

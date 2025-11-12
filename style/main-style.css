@@ -459,7 +459,7 @@ a {
 
 .button-icon:hover .material-icons,
 .button-combo:hover .button-icon .material-icons {
-    color: var(--main-fg);
+    color: var(--button-secondary-bg-hover);
 }
 
 .sort-button {
@@ -476,7 +476,7 @@ a {
 
 .button--inactive {
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 .link {
