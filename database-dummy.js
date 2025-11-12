@@ -8,7 +8,7 @@ const posts = [
     questionType: "Multiple-Choice",
     question: "Du möchtest den Systemüberblick für deinen Projektmanager dokumentieren. Für welches UML-Diagramm entscheidest du dich?", 
     answers: ["Objektdiagramm", "Use-Case-Diagramm", "Klassendiagramm", "Sequenzdiagramm"], 
-    correctAnswer: ["answer-2"],
+    correctAnswer: ["answer2"],
     explanation: "Das Use-Case-Diagramm ermöglicht eine detaillierte Darstellung des Systems",
     privatePost: false,
     likes: 12,
@@ -36,7 +36,7 @@ const posts = [
     questionType: "Multiple-Choice",
     question: "Du möchtest den Systemüberblick für deinen Projektmanager dokumentieren. Für welches UML-Diagramm entscheidest du dich?", 
     answers: ["Objektdiagramm", "Use-Case-Diagramm", "Klassendiagramm"], 
-    correctAnswer: ["answer-2"],
+    correctAnswer: ["answer2"],
     explanation: "Das Use-Case-Diagramm ermöglicht eine detaillierte Darstellung des Systems",
     privatePost: false,
     likes: 14,
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     post.answers.forEach((answer) => {
       let answerOption = `
       <label for="answer-option-${answerID}" class="answer-option checkmark-label">
-        <input type="checkbox" name="answer-option-${answerName}" id="answer-option-${answerID}" class="answer-option-input">
+        <input type="checkbox" name="answer${answerName}" id="answer-option-${answerID}" class="answer-option-input">
         <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
         <p class="answer-option-content checkmark-label-content">${answer}</p>
       </label>                      
