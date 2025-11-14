@@ -181,18 +181,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="divider"></div>
                 <div class="post-card-footer">
                   <div class="flex-container align-center gap-0">
-                    <button class="user-feedback-button" title="Gefällt mir">
-                      <div class="button-icon"><i class="material-icons">favorite_border</i></div>
+                    <button class="like-button user-feedback-button" title="Gefällt mir">
+                      <div class="button-icon animation-container" onclick="likePost(event)">
+                        <i class="material-icons">favorite_border</i>
+                        <div class="animation-item hide-visibility">
+                          <i class="material-icons">favorite</i>
+                        </div>
+                      </div>
                       <span class="user-feedback-counter">${post.likes}</span>
                     </button>                  
-                    <button class="user-feedback-button" title="Kommentare anzeigen">
+                    <button class="comment-button user-feedback-button" title="Kommentare anzeigen">
                       <div class="button-icon"><i class="material-icons">chat_bubble_outline</i></div>
                       <span class="user-feedback-counter">${post.comments.length}</span>
                     </button>                  
                   </div>                                  
                   <div class="flex-container align-center gap-0">
-                    <button class="user-feedback-button button-icon" title="Beitrag teilen"><i class="material-icons" style="transform: scale(-100%, 100%);">reply</i></button>
-                    <button class="user-feedback-button button-icon" title="Beitrag speichern"><i class="material-icons">bookmark_border</i></button>
+                    <button class="share-post-button user-feedback-button button-icon" title="Beitrag teilen"><i class="material-icons" style="transform: scale(-100%, 100%);">reply</i></button>
+                    <button class="save-post-button user-feedback-button button-icon" title="Beitrag speichern"><i class="material-icons">bookmark_border</i></button>
                   </div>
                 </div>
               </div>
@@ -224,7 +229,7 @@ function followCourse(e) {
 
 
 postsFeed.addEventListener('click', (e) => {
-  if (e.target.matches('.answer-option-input')) {
+  if(e.target.matches('.answer-option-input')) {
     const answerOptions = Array.from(e.target.parentElement.parentElement.children);
     const submitButton = e.target.parentElement.parentElement.parentElement.nextElementSibling;
 
@@ -238,8 +243,51 @@ postsFeed.addEventListener('click', (e) => {
     
   }
 
+  // console.log(e.target)
+
+  // if(e.target.matches('.like-button')) {
+  //   console.log(e.target)
+  // }
   
 })
+
+function changeLikeCount(targetCounter, postLiked, button) {
+  if(!postLiked) {
+    const likeAttribute = document.createAttribute('data-liked');
+    button.setAttributeNode(likeAttribute);
+    targetCounter.innerText++;
+  } else {
+    targetCounter.innerText--;
+    button.removeAttribute('data-liked');
+  }
+}
+
+function likePost(event) {
+  const likeButton = event.currentTarget;
+  const likeAnimationIcon = likeButton.children[1];
+  const counter = event.currentTarget.nextElementSibling;
+  const isPostLiked = likeButton.hasAttribute('data-liked');
+
+  likeButton.firstElementChild.classList.toggle('hide-visibility');
+  likeAnimationIcon.classList.toggle('hide-visibility');
+  likeAnimationIcon.classList.toggle('like-animation');
+
+  // const likeButtonAttributes = likeButton.attributes;
+  // const likeButtonAttributesArray = Array.from(likeButtonAttributes)
+  
+  // const isPostLiked = likeButtonAttributesArray.some((attribute) => {
+  //   return attribute.name === "data-liked";
+  // })
+  
+  
+  // const isPostLiked = likeButtonAttributesArray.length == 3;
+  
+  changeLikeCount(counter, isPostLiked, likeButton);
+
+  // console.log(isPostLiked)
+
+}
+
 
 postsFeed.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -252,7 +300,7 @@ postsFeed.addEventListener('submit', (e) => {
   const answerOptions = Array.from(e.target.children[1].children);
   
   // find the post that was submitted for evaluation
-  const correlatingPost = posts.find((post) => {
+  const correspondingPost = posts.find((post) => {
     return post.question === postQuestion;
   })
 
@@ -263,12 +311,12 @@ postsFeed.addEventListener('submit', (e) => {
   
   // check if all user answers match correct answers
   const isUserSelectionCorrect = userAnswers.every((userAnswer) => {
-    return correlatingPost.correctAnswer.includes(userAnswer);
+    return correspondingPost.correctAnswer.includes(userAnswer);
   })
 
   const correctAnswerOptions = answerOptions.filter((answerOption) => {
     let optionName = answerOption.firstElementChild.name;
-    let isCorrectAnswerOption = correlatingPost.correctAnswer.includes(optionName);
+    let isCorrectAnswerOption = correspondingPost.correctAnswer.includes(optionName);
     if(isCorrectAnswerOption) {
       return answerOption
     }
@@ -317,7 +365,7 @@ postsFeed.addEventListener('submit', (e) => {
     // if answer-option is selected check whether the answer is correct or wrong
     if(selectedOption) {
       let selectionName = answer.firstElementChild.name;
-      let isCorrectSelection = correlatingPost.correctAnswer.includes(selectionName);
+      let isCorrectSelection = correspondingPost.correctAnswer.includes(selectionName);
       
       isCorrectSelection ? answer.classList.add('correct-answer-option') : answer.classList.add('wrong-answer-option');
     }
@@ -331,7 +379,7 @@ postsFeed.addEventListener('submit', (e) => {
       <div class="answer-feedback-result ${feedBackResultColor()}">${answerFeedbackResult()}</div>                
       <button class="show-solution-button button-ghost"><i class="material-icons">keyboard_arrow_down</i>Erklärung anzeigen</button>
     </div>
-    <div class="solution-content hidde">${correlatingPost.explanation}</div>
+    <div class="solution-content hidde">${correspondingPost.explanation}</div>
   </div>
   `;
 
@@ -341,7 +389,7 @@ postsFeed.addEventListener('submit', (e) => {
 // function evaluateResult(event) {
 //   const postQuestion = event.currentTarget.parentElement.parentElement.firstElementChild.firstElementChild.innerText;
 
-//   let correlatingPost = posts.find((post) => {
+//   let correspondingPost = posts.find((post) => {
 //     return post.question === postQuestion;
 //   })
 
@@ -351,7 +399,7 @@ postsFeed.addEventListener('submit', (e) => {
 //       <div class="answer-feedback-result correct-answer">Ihre Antwort ist richtig!</div>                
 //       <button class="show-solution-button button-ghost"><i class="material-icons">keyboard_arrow_down</i>Erklärung anzeigen</button>
 //     </div>
-//     <div class="solution-content hidde">${correlatingPost.explanation}</div>
+//     <div class="solution-content hidde">${correspondingPost.explanation}</div>
 //   </div>
 //   `;
 

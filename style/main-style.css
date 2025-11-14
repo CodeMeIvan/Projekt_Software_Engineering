@@ -863,6 +863,7 @@ ul.flex-container {
 }
 
 .user-feedback-counter {
+    pointer-events: none;
     font-size: var(--f-size-14);
     line-height: var(--lh-f-size-14);
     transition: var(--transition);
@@ -1294,6 +1295,13 @@ ul.flex-container {
     position: absolute;
     top: 0;
     left: 0;
+    /* transform: translate(-50%, -50%); */
+    transition: var(--transition);
+    height: 36px;
+    width: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .animation-item .material-icons {
