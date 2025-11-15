@@ -1,10 +1,15 @@
 // --------------------dieser Bereich befindet sich noch in Arbeit--------------------
 // bisher implementiert:
 //  dynamisches Laden von Beiträgen aus einer Dummy-Datenbank,
-//  Folgen-Knopf wird nur für nicht gefolgte Kurse angezeigt, nach Klick wird der Kurs der myFollowsList hinzugefügt (keine persistente Speicherung, da keine echte Datenbank) und danach deaktiviert
+//  Folgen-Knopf wird nur für nicht gefolgte Kurse angezeigt, nach Klick wird der Kurs der myFollowsList[] hinzugefügt (keine persistente Speicherung, da keine echte Datenbank) und danach deaktiviert
 //  Antwortmöglichkeiten auswählen mit visuellem Feedback,
 //  Auswerten-Knopf blendet die Erklärung und Antwort-Feedback ein,
 //  nach Auswertung werden Antwortmöglichkeiten deaktiviert
+//  Multiple-Choice-Fragen lassen sich auswerten
+//  Wahr-oder-Falsch-Fragen lassen sich auswerten
+//  Like-Button animiert, verändert den Zähler beim Klick
+//  Beitrag-speichern-Button animiert, noch keine Funktion
+//  Erklärung lässt sich ein- und ausblenden
 
 const posts = [
   {
@@ -64,7 +69,7 @@ const posts = [
     ]
   },
   {
-    postID: "post-2",
+    postID: "post-3",
     postDate: new Date("2025-10-22T17:21:41Z"),
     author: "Max Mustermann",
     degree: "B.Sc. Wirtschaftsinformatik",
@@ -74,7 +79,7 @@ const posts = [
     correctAnswer: ["trueStatement"],
     explanation: "Hier steht die Erklärung",
     privatePost: false,
-    likes: 25,
+    likes: 14,
     comments: [
       {
         username: "Andrea Berg", 
@@ -409,51 +414,50 @@ function showExplanation(event) {
   solutionContent.classList.toggle('hidden');
 }
 
-// when user submits his answer selection trigger this function
-postsFeed.addEventListener('submit', (e) => {
-  // stop the default submit event, data is not send to a server
-  e.preventDefault();
-  const postCardContent = e.target.parentElement;
-  const submitButton = e.target.nextElementSibling;
-  // hide the show result button
-  submitButton.classList.add('hidden');
+function evaluateUserAnswers(correspondingPost, questionType, entries, answerOptions) {
+  let userAnswers;
+  let correctAnswerOptions;
+  let allCorrectAnswersSelected;
+  let isUserSelectionCorrect;
+  let isCorrectAnswer;
 
-  const postQuestion = e.target.parentElement.parentElement.firstElementChild.firstElementChild.innerText;
-  const answerOptions = Array.from(e.target.children[1].children);
+  // for multiple choice do this
+  if(questionType === "Multiple-Choice") {
+    userAnswers = Object.keys(entries);
+    
+    // filter[] for all correct answers
+    correctAnswerOptions = answerOptions.filter((answerOption) => {
+      let optionName = answerOption.firstElementChild.name;
+      let isCorrectAnswerOption = correspondingPost.correctAnswer.includes(optionName);
+      if(isCorrectAnswerOption) {
+        return answerOption
+      }
+    });
+    
+    // check if all correct answers are selected
+    allCorrectAnswersSelected = correctAnswerOptions.every((answer) => {
+      return answer.matches('.answer-option-selected');
+    });
+    
+    // check if any of the selected answers are false
+    isUserSelectionCorrect = userAnswers.every((userAnswer) => {
+      return correspondingPost.correctAnswer.includes(userAnswer);
+    })
+    
+    // check if all conditions for the correct answer feedback are met
+    isCorrectAnswer = allCorrectAnswersSelected && isUserSelectionCorrect ? true : false;
+  }
+  // for true or false do this
+  if(questionType === "Wahr-oder-Falsch") {
+    userAnswers = Object.values(entries);
+    // check if user selection is correct
+    isCorrectAnswer = userAnswers.every((userAnswer) => {
+      return correspondingPost.correctAnswer.includes(userAnswer);
+    })
+  }
   
-  // find the post that was submitted for evaluation
-  const correspondingPost = posts.find((post) => {
-    return post.question === postQuestion;
-  })
-
-  // collect user answers
-  const formData = new FormData(e.target);
-  const entries = Object.fromEntries(formData.entries());
-  const userAnswers = Object.keys(entries);
-  
-  // check if all user answers match correct answers
-  const isUserSelectionCorrect = userAnswers.every((userAnswer) => {
-    return correspondingPost.correctAnswer.includes(userAnswer);
-  })
-
-  // filter all answer options just for the correct ones
-  const correctAnswerOptions = answerOptions.filter((answerOption) => {
-    let optionName = answerOption.firstElementChild.name;
-    let isCorrectAnswerOption = correspondingPost.correctAnswer.includes(optionName);
-    if(isCorrectAnswerOption) {
-      return answerOption
-    }
-  });
-  
-  // check if all correct answers are selected
-  const allCorrectAnswersSelected = correctAnswerOptions.every((answer) => {
-    return answer.matches('.answer-option-selected');
-  });
-  
-  // check if all conditions for the correct answer are met
-  const isCorrectAnswer = allCorrectAnswersSelected && isUserSelectionCorrect ? true : false;
   // set the feedback message
-  function answerFeedbackResult() {
+  const answerFeedback = () => {
     if(isCorrectAnswer) {
       return "Ihre Antwort ist richtig"
     }
@@ -468,7 +472,7 @@ postsFeed.addEventListener('submit', (e) => {
 
   }
   // set the feedback message color
-  function feedBackResultColor() {
+  const answerFeedbackColor = () => {
     if(isCorrectAnswer) {
       return "correct-answer"
     }
@@ -487,21 +491,60 @@ postsFeed.addEventListener('submit', (e) => {
     // get the selection
     let selectedOption = answer.matches('.answer-option-selected');
     // if answer-option is selected check whether the answer is correct or wrong
-    if(selectedOption) {
+    if(selectedOption && questionType === "Multiple-Choice") {
       let selectionName = answer.firstElementChild.name;
       // evaluate user answer
       let isCorrectSelection = correspondingPost.correctAnswer.includes(selectionName);
       // show correct answer in green, wrong answer in red
       isCorrectSelection ? answer.classList.add('correct-answer-option') : answer.classList.add('wrong-answer-option');
     }
+    // if answer-option is selected check whether the answer is correct or wrong
+    if(selectedOption && questionType === "Wahr-oder-Falsch") {
+      let selectionValue = answer.firstElementChild.value;
+      // evaluate user answer
+      let isCorrectSelection = correspondingPost.correctAnswer.includes(selectionValue);
+      // show correct answer in green, wrong answer in red
+      isCorrectSelection ? answer.classList.add('correct-answer-option') : answer.classList.add('wrong-answer-option');
+    }
     // disable answer selection after submit
     answer.classList.add('answer-option-disabled');
   })
+
+  return {
+    message: answerFeedback,
+    color: answerFeedbackColor
+  };
+}
+
+// when user submits his answer selection trigger this function
+postsFeed.addEventListener('submit', (e) => {
+  // stop the default submit event, data is not send to a server
+  e.preventDefault();
+  const postCardContent = e.target.parentElement;
+  const submitButton = e.target.nextElementSibling;
+  // hide the submit button
+  submitButton.classList.add('hidden');
   
+  const postQuestion = e.target.parentElement.parentElement.firstElementChild.firstElementChild.innerText;
+  const answerOptions = Array.from(e.target.children[1].children);
+  
+  // find the post that was submitted for evaluation
+  const correspondingPost = posts.find((post) => {
+    return post.question === postQuestion;
+  })
+  
+  // collect user answers
+  const formData = new FormData(e.target);
+  const entries = Object.fromEntries(formData.entries());
+
+  // evaluate user input and return feedback message and color
+  const userFeedback = evaluateUserAnswers(correspondingPost, correspondingPost.questionType, entries, answerOptions);
+  
+  // set answer feedback content
   let result = `
   <div class="solution-container">
     <div class="answer-feedback">
-      <div class="answer-feedback-result ${feedBackResultColor()}">${answerFeedbackResult()}</div>                
+      <div class="answer-feedback-result ${userFeedback.color()}">${userFeedback.message()}</div>                
       <button class="show-solution-button button-ghost" onclick="showExplanation(event)"><i class="material-icons">keyboard_arrow_down</i>Erklärung anzeigen</button>
     </div>
     <div class="solution-content hidden">${correspondingPost.explanation}</div>
