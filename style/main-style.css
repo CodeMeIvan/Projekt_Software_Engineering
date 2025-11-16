@@ -1073,6 +1073,7 @@ ul.flex-container {
 
 .modal {
     background-color: rgb(14, 14, 14, 0.99);
+    background-color: rgba(5, 5, 5, 0.98);
     backdrop-filter: blur(2px);
     position: fixed;
     top: 0;
@@ -1087,6 +1088,19 @@ ul.flex-container {
     /* display: none; */
 }
 
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: var(--z-index-lvl-200);
+    color: var(--main-fg);
+}
+
+.close-button .material-icons {
+    pointer-events: none;
+    font-size: 1.75rem;
+}
+
 .modal-content {
     display: flex;
     background-color: var(--main-bg-elevated);
@@ -1096,7 +1110,6 @@ ul.flex-container {
     border-radius: var(--border-radius-l);
     z-index: var(--z-index-lvl-200);
     overflow: hidden;
-    /* width: max-content; */
 }
 
 .post-section {
@@ -1180,6 +1193,12 @@ ul.flex-container {
     padding: 1rem;
     flex: 1 auto;
     overflow-y: auto;
+    /* max-height: 400px; */
+}
+
+.empty-comment-section-content {
+    font-size: var(--f-size-14);
+    line-height: var(--lh-f-size-14);
 }
 
 .user-comment {
@@ -1268,7 +1287,7 @@ ul.flex-container {
     border: 1px solid transparent;
     border-bottom: var(--main-border);
     padding: var(--input-padding);
-    max-height: 150px;
+    max-height: 120px;
 }
 
 .comment-input::-webkit-scrollbar {

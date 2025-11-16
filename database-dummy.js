@@ -65,6 +65,30 @@ const posts = [
         userPicture: randomizeBackground(),
         postDate: new Date("2025-11-12T11:14:55Z"), 
         content: "Ich war mir sicher, dass Antwort 4 die richtige sei. Man lernt wohl nie aus."
+      }, 
+      {
+        username: "Andrea Berg", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-11T23:24:12Z"), 
+        content: "Sehr interessanter Beitrag. Bitte mehr davon."
+      },
+      {
+        username: "Felix Blume", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-12T11:14:55Z"), 
+        content: "Ich war mir sicher, dass Antwort 4 die richtige sei. Man lernt wohl nie aus."
+      }, 
+      {
+        username: "Andrea Berg", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-11T23:24:12Z"), 
+        content: "Sehr interessanter Beitrag. Bitte mehr davon."
+      },
+      {
+        username: "Felix Blume", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-12T11:14:55Z"), 
+        content: "Ich war mir sicher, dass Antwort 4 die richtige sei. Man lernt wohl nie aus."
       } 
     ]
   },
@@ -85,7 +109,13 @@ const posts = [
 ];
 
 function randomizeBackground() {
-  return "DarkSlateGrey";
+  const backgroundColors = ['crimson', 'darkcyan', 'darkolivegreen', 'darkmagenta', 'darkslateblue', 'darkslategrey', 'green', 'midnightblue'];
+
+  function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+  }
+
+  return backgroundColors[getRndInteger(0, 7)];
 }
 
 const myFollowList = ['Requirements Engineering', 'Wissenschaftliches Arbeiten'];
@@ -132,6 +162,13 @@ function timeSince(date) {
 
 const postsFeed = document.getElementById('posts-feed');
 
+function closeCommentSection(event) {
+  const isTargetModal = event.target.matches('.modal');
+  const isTargetCloseButton = event.target.matches('.close-button');
+
+  isTargetModal || isTargetCloseButton ? event.currentTarget.remove() : null;
+}
+
 // follow button adds a course to myFollowList[]
 function followCourse(e) {
   // get course name
@@ -164,7 +201,6 @@ function renderFollowButton(post) {
   }
   return followButton                    
 }
-
 
 
 function renderPostFeed(postsDataset) {
@@ -259,8 +295,8 @@ function renderPostFeed(postsDataset) {
                 </div>
                 <span class="user-feedback-counter">${post.likes}</span>
               </button>                  
-              <button class="comment-button user-feedback-button" title="Kommentare anzeigen" data-post-id="${postID}" onclick="showComments(event)">
-                <div class="button-icon"><i class="material-icons">chat_bubble_outline</i></div>
+              <button class="comment-button user-feedback-button" title="Kommentare anzeigen">
+                <div class="button-icon" data-post-id="${postID}" onclick="openCommentSection(event)"><i class="material-icons">chat_bubble_outline</i></div>
                 <span class="user-feedback-counter">${post.comments.length}</span>
               </button>
             </div>
@@ -354,6 +390,17 @@ postsFeed.addEventListener('click', (e) => {
   
 })
 
+postsFeed.addEventListener('input', (e) => {
+  // get input border height
+  let inputBorder = e.target.offsetHeight - e.target.clientHeight;
+
+  // set element's height to auto when input shrinks
+  e.target.style.height = "auto";
+
+  // set element's height when input grows
+  e.target.style.height = e.target.scrollHeight + inputBorder + "px";
+})
+
 // when user clicks the like button call this function to change the like count
 function changeLikeCount(targetCounter, postLiked, button) {
   // check if the post has already been liked
@@ -388,19 +435,121 @@ function likePost(event) {
 
 }
 
-function showComments(event) {
+function setModalContentHeight() {
+  const postSectionHeight = postsFeed.firstElementChild.children[1].firstElementChild.clientHeight;
+  const modalContent = postsFeed.firstElementChild.children[1];
+  
+  modalContent.style.height = `${postSectionHeight}px`;
+}
+
+function openCommentSection(event) {
   const postID = event.currentTarget.attributes["data-post-id"].value;
   const correspondingPost = posts.find((post) => {
     return post.postID === postID;
   })
 
+  const answerOptions = event.currentTarget.parentElement.parentElement.parentElement.previousElementSibling.previousElementSibling.firstElementChild.lastElementChild.children;
+  const answerOptionsArray = Array.from(answerOptions);
+
+  // console.log(answerOptionsArray)
+  // let answerID = 1;
+  
+  function renderPostCardContent(questionType) {
+    let answerName = 1;
+    // options array
+    let answerContent = [];
+    // if question type is Multiple-Choice then render this content
+    if(questionType === "Multiple-Choice") {
+      // push answer options into answerContent[]
+      correspondingPost.answers.forEach((answer, index) => {
+        const correspondingAnswerID = answerOptionsArray[index].attributes['for'].value;          
+
+        let answerOption = `
+        <label for="${correspondingAnswerID}" class="answer-option checkmark-label">
+          <input type="checkbox" name="answer${answerName}" id="${correspondingAnswerID}" class="answer-option-input">
+          <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+          <p class="answer-option-content checkmark-label-content">${answer}</p>
+        </label>                      
+        `;
+        // answerID++;
+        answerName++;
+  
+        answerContent.push(answerOption)
+      });
+    // if question type is Wahr-oder-Falsch then render this content
+    }
+    if(questionType === "Wahr-oder-Falsch") {
+      const trueStatementID = answerOptionsArray[0].attributes['for'].value;
+      const falseStatementID = answerOptionsArray[1].attributes['for'].value;
+      let answerOptions = `
+      <label for="${trueStatementID}" class="answer-option checkmark-label">
+        <input type="radio" name="trueOrFalse" value="trueStatement" id="${trueStatementID}" class="answer-option-input">
+        <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+        <p class="answer-option-content checkmark-label-content">Wahr</p>
+      </label>                      
+        <label for="${falseStatementID}" class="answer-option checkmark-label">
+        <input type="radio" name="trueOrFalse" value="falseStatement" id="${falseStatementID}" class="answer-option-input">
+        <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+        <p class="answer-option-content checkmark-label-content">Falsch</p>
+      </label>                      
+      `;
+      
+      // answerID = answerID + 2;
+
+      // push answer options into answerContent[]
+      answerContent.push(answerOptions)
+      
+    }
+    // join answer options into a single string for rendering
+    let answerOptionsContent = answerContent.join("");
+
+    return answerOptionsContent;
+  }
+ 
+  function renderComments() {
+    const commentsArray = [];
 
 
+    correspondingPost.comments.forEach((comment) => {
+      let userComment = 
+      `
+      <div class="user-comment">
+        <div class="user-profile-picture" style="background-color: ${randomizeBackground()};">${comment.username.charAt(0)}</div>
+        <div class="user-comment-info">
+          <div class="flex-container align-center gap-0">
+            <h4 class="comment-username">${comment.username}</h4>
+            <span>&#128900;</span>
+            <span class="comment-post-date">${timeSince(comment.postDate)}</span>
+          </div>
+          <button class="comment-menu button-icon"><i class="material-icons">more_vert</i></button>
+        </div>
+        <p class="user-comment-content">${comment.content}</p>
+      </div>
+      `;
 
+      commentsArray.push(userComment);
+    })
+
+    const commentsContent = commentsArray.join('');
+  
+    if(commentsContent.length > 0) {
+      return commentsContent;
+    }
+    else {
+      let emptyCommentSection = 
+      `
+      <p class="empty-comment-section-content">Noch keine Kommentare</p>
+      `;
+
+      return emptyCommentSection;
+    }
+
+  }
 
   let postContent = 
   `
-  <div class="modal">
+  <div class="modal" onclick="closeCommentSection(event)">
+    <button class="close-button button-icon"><i class="material-icons">close</i></button>
     <div class="modal-content">
         <div class="post-section">
           <div class="post-info">
@@ -422,7 +571,7 @@ function showComments(event) {
               <form id="post-answers-form" class="post-answers">
                 <div class="post-card-question-type">${correspondingPost.questionType}</div>
                 <div class="answer-options-container">
-                  Antwortmöglichkeiten
+                  ${renderPostCardContent(correspondingPost.questionType)}
                 </div>
               </form>
               <button form="post-answers-form" type="submit" class="submit-answer-button button-primary button--inactive">Auswerten</button>                        
@@ -438,9 +587,9 @@ function showComments(event) {
                   </div>
                   <span class="user-feedback-counter">12</span>
                 </button>                  
-                <button class="comment-button user-feedback-button" title="Kommentar schreiben">
+                <label for="comment-input" class="comment-button user-feedback-button" title="Kommentar schreiben">
                   <div class="button-icon"><i class="material-icons">chat_bubble_outline</i></div>              
-                </button>
+                </label>
               </div>
               <div class="flex-container align-center gap-0">
                 <button class="share-post-button user-feedback-button button-icon" title="Beitrag teilen">
@@ -465,21 +614,10 @@ function showComments(event) {
             <button type="button" class="button-icon"><i class="material-icons" style="font-size: 28px;">sort</i></button>
           </div>
             <div class="comment-section-content">                    
-              <div class="user-comment">
-                <div class="user-profile-picture">M</div>
-                <div class="user-comment-info">
-                  <div class="flex-container align-center gap-0">
-                    <h4 class="comment-username">Max Mustermann</h4>
-                    <span>&#128900;</span>
-                    <span class="comment-post-date">14 min</span>
-                  </div>
-                  <div class="comment-menu button-icon"><i class="material-icons">more_vert</i></div>
-                </div>
-                <p class="user-comment-content">Dieser Beitrag ist sehr hilfreich. Danke!</p>
-              </div>                          
+              ${renderComments()}                          
             </div>
             <div class="comment-section-footer">                    
-              <textarea name="" id="textarea" class="comment-input auto-grow-element" placeholder="Kommentar hinzufügen" rows="1"></textarea>
+              <textarea name="commentInput" id="comment-input" class="comment-input auto-grow-element" placeholder="Kommentar hinzufügen" rows="1"></textarea>
               <button type="submit" class="button-secondary">Posten</button>
             </div>
         </div>
@@ -488,8 +626,8 @@ function showComments(event) {
   `;
 
   postsFeed.insertAdjacentHTML("afterbegin", postContent);
-  console.log(correspondingPost)
-
+  
+  setModalContentHeight();
 }
 
 // on save post button click trigger this function
