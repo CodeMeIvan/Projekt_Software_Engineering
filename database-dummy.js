@@ -108,14 +108,23 @@ const posts = [
   }
 ];
 
+const currentUser = 
+{
+  username: "Tester",
+  userPicture: randomizeBackground(),
+  posts: [],
+  comments: [],
+  favoritePosts: []
+};
+
 
 function randomizeBackground() {
   const backgroundColors = ['crimson', 'darkcyan', 'darkolivegreen', 'darkmagenta', 'darkslateblue', 'darkslategrey', 'green', 'midnightblue'];
-
+  
   function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
   }
-
+  
   return backgroundColors[getRndInteger(0, 7)];
 }
 
@@ -125,6 +134,7 @@ const myFavorites = [{postID: "post-1"}, {postID: "post-2"}];
 
 const myQuestions = [{postID: "post-1"}];
 
+// console.log(randomizeBackground())
 
 
 // get the time difference between postDate and current time
@@ -628,8 +638,10 @@ function openCommentSection(event) {
               ${renderComments()}                          
             </div>
             <div class="comment-section-footer">                    
-              <textarea name="commentInput" id="comment-input" class="comment-input auto-grow-element" placeholder="Kommentar hinzufügen" rows="1"></textarea>
-              <button type="submit" class="button-secondary">Posten</button>
+              <form action="" id="user-comment-form" class="user-comment-form">
+                <textarea name="commentInput" id="comment-input" class="comment-input auto-grow-element" placeholder="Kommentar hinzufügen" rows="1" required></textarea>
+                <button type="submit" class="submit-user-comment button-secondary" data-post-id="${correspondingPost.postID}">Posten</button>
+              </form>
             </div>
         </div>
     </div>
@@ -772,41 +784,191 @@ function evaluateUserAnswers(correspondingPost, questionType, entries, answerOpt
   };
 }
 
-// when user submits his answer selection trigger this function
 postsFeed.addEventListener('submit', (e) => {
   // stop the default submit event, data is not send to a server
   e.preventDefault();
-  const postCardContent = e.target.parentElement;
-  const submitButton = e.target.nextElementSibling;
-  // hide the submit button
-  submitButton.classList.add('hidden');
-  
-  const postQuestion = e.target.parentElement.parentElement.firstElementChild.firstElementChild.innerText;
-  const answerOptions = Array.from(e.target.children[1].children);
-  
-  // find the post that was submitted for evaluation
-  const correspondingPost = posts.find((post) => {
-    return post.question === postQuestion;
-  })
-  
-  // collect user answers
+
+  // collect user input
   const formData = new FormData(e.target);
   const entries = Object.fromEntries(formData.entries());
 
-  // evaluate user input and return feedback message and color
-  const userFeedback = evaluateUserAnswers(correspondingPost, correspondingPost.questionType, entries, answerOptions);
+
+  // when user submits his answer selection trigger this function
+  if(e.submitter.matches('.submit-answer-button')) {    
+    const postCardContent = e.target.parentElement;
+    const submitButton = e.target.nextElementSibling;
+    // hide the submit button
+    submitButton.classList.add('hidden');
+    
+    const postQuestion = e.target.parentElement.parentElement.firstElementChild.firstElementChild.innerText;
+    const answerOptions = Array.from(e.target.children[1].children);
+    
+    // find the post that was submitted for evaluation
+    const correspondingPost = posts.find((post) => {
+      return post.question === postQuestion;
+    })
+    
   
-  // set answer feedback content
-  let result = `
-  <div class="solution-container">
-    <div class="answer-feedback">
-      <div class="answer-feedback-result ${userFeedback.color()}">${userFeedback.message()}</div>                
-      <button class="show-solution-button button-ghost" onclick="showExplanation(event)"><i class="material-icons">keyboard_arrow_down</i>Erklärung anzeigen</button>
+    // evaluate user input and return feedback message and color
+    const userFeedback = evaluateUserAnswers(correspondingPost, correspondingPost.questionType, entries, answerOptions);
+    
+    // set answer feedback content
+    let result = `
+    <div class="solution-container">
+      <div class="answer-feedback">
+        <div class="answer-feedback-result ${userFeedback.color()}">${userFeedback.message()}</div>                
+        <button class="show-solution-button button-ghost" onclick="showExplanation(event)"><i class="material-icons">keyboard_arrow_down</i>Erklärung anzeigen</button>
+      </div>
+      <div class="solution-content hidden">${correspondingPost.explanation}</div>
     </div>
-    <div class="solution-content hidden">${correspondingPost.explanation}</div>
-  </div>
-  `;
-  // render answer feedback container
-  postCardContent.insertAdjacentHTML("beforeend", result);
+    `;
+    // render answer feedback container
+    postCardContent.insertAdjacentHTML("beforeend", result);
+  }
+
+  if(e.submitter.matches('.submit-user-comment')) {
+    const userCommentContent = entries.commentInput;
+    const submitButton = e.target.lastElementChild;
+    const submittedPostID = submitButton.attributes['data-post-id'].value;
+    const correspondingPost = posts.find((post) => {
+      return post.postID === submittedPostID;
+    })
+    const commentSectionContent = e.target.parentElement.previousElementSibling;
+
+    // reset form inputs after submit
+    e.target.reset();
+    const inputField = e.target.firstElementChild;
+    inputField.style.height = "36px";
+    
+    // create a new user comment{object} 
+    let newUserComment = 
+    {
+        username: currentUser.username, 
+        userPicture: currentUser.userPicture,
+        postDate: new Date(),
+        content: `${userCommentContent}`
+      } ;
+    
+    // add the new comment to the corresponding post  
+    correspondingPost.comments.push(newUserComment);
+    
+    // create a new user-comment component
+    let userCommentOutput = 
+      `
+      <div class="user-comment">
+        <div class="user-profile-picture" style="background-color: ${newUserComment.userPicture};">${newUserComment.username.charAt(0)}</div>
+        <div class="user-comment-info">
+          <div class="flex-container align-center gap-0">
+            <h4 class="comment-username">${newUserComment.username}</h4>
+            <span>&#128900;</span>
+            <span class="comment-post-date">${timeSince(newUserComment.postDate)}</span>
+          </div>
+          <button class="comment-menu button-icon"><i class="material-icons">more_vert</i></button>
+        </div>
+        <p class="user-comment-content">${newUserComment.content}</p>
+      </div>
+      `;
+    
+    // check if corresponding post has no comments yet then remove the message if true
+    if(commentSectionContent.firstElementChild.matches('.empty-comment-section-content')) {
+      commentSectionContent.firstElementChild.remove();
+    }
+    // render the new comment
+    commentSectionContent.insertAdjacentHTML('beforeend', userCommentOutput);
+    
+  }
+  
 })
 
+
+document.body.addEventListener('click', (event) => {
+
+  // console.log(event)
+
+  if(event.target.matches('.sort-button')) {
+    // const likes = []
+    
+    // posts.forEach((post) => {
+    //   likes.push(post.likes)
+    // })
+
+    const popover = event.target.nextElementSibling;
+    const popoverContent = event.target.parentElement.lastElementChild;
+
+    popover.classList.toggle('hidden');
+    popoverContent.classList.toggle('hidden');
+    
+    
+  }
+  
+  if(event.target.matches('.popover')) {
+    const popoverContent = event.target.nextElementSibling;
+    
+    event.target.classList.toggle('hidden');
+    popoverContent.classList.toggle('hidden');
+  }
+})
+
+document.body.addEventListener('submit', (event) => {
+  if (event.target.matches('.sort-feed-form')) {
+    // stop default submit event
+    event.preventDefault();
+
+    const popover = event.target.parentElement.previousElementSibling;
+    const popoverContent = event.target.parentElement;
+
+    // collect user input
+    const formData = new FormData(event.target);
+    const entries = Object.fromEntries(formData.entries());
+
+    const sortBy = entries.sortBy;
+    const sortOrder = entries.sortOrder;
+    const descendingOrder = sortOrder === "descending" ? true : false;
+    let sortedFeed;
+    // console.log(sortBy, sortOrder)
+
+    switch (sortBy) {
+      case "date":
+        
+        descendingOrder ? 
+        sortedFeed = posts.toSorted((a, b) => {
+          return b.postDate - a.postDate;
+        }) 
+        : sortedFeed = posts.toSorted((a, b) => {
+          return a.postDate - b.postDate;
+        });
+        
+        break;
+        case "likes":
+          
+          descendingOrder ? 
+          sortedFeed = posts.toSorted((a, b) => {
+            return b.likes - a.likes;
+          }) 
+          : sortedFeed = posts.toSorted((a, b) => {
+            return a.likes - b.likes;
+          });
+          
+          break;
+          case "comments":
+            
+            descendingOrder ? 
+            sortedFeed = posts.toSorted((a, b) => {
+              return b.comments.length - a.comments.length;
+            }) 
+            : sortedFeed = posts.toSorted((a, b) => {
+              return a.comments.length - b.comments.length;
+            });
+
+        break;
+    }
+    
+    
+    postsFeed.innerHTML = "";
+    renderPostFeed(sortedFeed);
+
+    // event.target.reset();
+    popover.classList.toggle('hidden');
+    popoverContent.classList.toggle('hidden');
+  }
+})

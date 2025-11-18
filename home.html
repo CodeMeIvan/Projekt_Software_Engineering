@@ -15,7 +15,7 @@
   </head>
   <body class="flex-container justify-center align-center">
     <header class="main-header flex-container justify-between align-center">
-      <div id="app-logo" class="app-logo app-logo--header flex-container align-center gap-1"><img src="icons/app_logo.svg" alt="Logo" srcset="" style="height: 1.75rem;">IUnity</div>
+      <a href="home.html" class="app-logo app-logo--header flex-container align-center gap-1"><img src="icons/app_logo.svg" alt="Logo" srcset="" style="height: 1.75rem;">IUnity</a>
       <div class="search-bar">
         <i class="search-icon material-icons">search</i>
         <input type="search" name="search-input" id="search-input" class="search-input input-field" placeholder="Fach suchen">
@@ -44,7 +44,45 @@
           <div class="content-filter-container">
             <div class="sort-container">
               <button type="button" class="sort-button button-combo"><i class="material-icons" style="font-size: 28px;">sort</i>Sortieren</button>
-              <div class="sort-content hidden">
+              <div class="popover hidden"></div>
+              <div class="popover-content hidden">
+                <form action="" id="sort-feed-form" class="sort-feed-form">
+                  <div class="field-set">
+                    <p class="field-set-description">Sortieren nach:</p>
+                    <label class="sort-option checkmark-label" title="Nach Datum sortieren">
+                      <input type="radio" name="sortBy" value="date" checked>
+                      <span class="custom-checkmark"></span>
+                      <p class="checkmark-label-content">Datum</p>
+                    </label>
+                    <label class="sort-option checkmark-label" title="Nach Likes sortieren">
+                      <input type="radio" name="sortBy" value="likes">
+                      <span class="custom-checkmark"></span>
+                      <p class="checkmark-label-content">Likes</p>
+                    </label>
+                    <label class="sort-option checkmark-label" title="Nach Kommentaren sortieren">
+                      <input type="radio" name="sortBy" value="comments">
+                      <span class="custom-checkmark"></span>
+                      <p class="checkmark-label-content">Kommentaren</p>
+                    </label>
+                  </div>
+                  <div class="field-set">
+                    <p class="field-set-description">Reihenfolge:</p>
+                    <label class="sort-option checkmark-label" title="Absteigend sortieren">
+                      <input type="radio" name="sortOrder" value="descending" checked>
+                      <span class="custom-checkmark"></span>
+                      <p class="checkmark-label-content">Absteigend</p>
+                    </label>                    
+                    <label class="sort-option checkmark-label" title="Aufsteigend sortieren">
+                      <input type="radio" name="sortOrder" value="ascending">
+                      <span class="custom-checkmark"></span>
+                      <p class="checkmark-label-content">Aufsteigend</p>
+                    </label>
+                  </div>
+                </form>
+                <button form="sort-feed-form" type="submit" class="button-secondary">Änderungen anwenden</button>
+              </div>
+              <!-- <button type="submit" class="filter-post-feed-button button-tertiary">Filtern</button> -->
+              <!-- <div class="sort-content hidden">
                 <form id="sort-feed" class="flex-container gap-2">
                     <div class="form-field">
                         <div class="form-field-description">Sortieren nach:</div>
@@ -86,7 +124,7 @@
                     </div>                    
                 </form>
                 <button id="apply-filter-button" class="button-secondary">Änderungen anwenden</button>
-              </div>
+              </div> -->
             </div>
             <!-- <select name="" id="" class="select-input">
               <optgroup label="Welcher Studiengang interessiert dich?">
@@ -176,9 +214,11 @@
                           <p class="user-comment-content">Dieser Beitrag ist sehr hilfreich. Danke!</p>
                         </div>                          
                       </div>
-                      <div class="comment-section-footer">                    
-                        <textarea name="" id="textarea" class="comment-input auto-grow-element" placeholder="Kommentar hinzufügen" rows="1"></textarea>
-                        <button type="submit" class="button-secondary">Posten</button>
+                      <div class="comment-section-footer">
+                        <form action="" id="user-comment-form">
+                          <textarea name="commentInput" id="comment-input" class="comment-input auto-grow-element" placeholder="Kommentar hinzufügen" rows="1"></textarea>
+                          <button type="submit" class="button-secondary">Posten</button>
+                        </form>
                       </div>
                   </div>
               </div>
