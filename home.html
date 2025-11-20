@@ -20,14 +20,14 @@
         <i class="search-icon material-icons">search</i>
         <input type="search" name="search-input" id="search-input" class="search-input input-field" placeholder="Fach suchen">
       </div>
-      <button type="button"><a href="add_new_question.html" class="button-secondary button-combo"><i class="material-icons">library_add</i>Beitrag erstellen</a></button>
+      <button type="button"><a href="add-new-question.html" class="button-secondary button-combo"><i class="material-icons">library_add</i>Beitrag erstellen</a></button>
     </header>
     <nav class="main-nav flex-container flex-column justify-between">
       <div class="flex-container flex-column gap-1">
         <a href="#" class="nav-li current-page">Startseite</a>
-        <a href="#" class="nav-li">Entdecken</a>
-        <a href="#" class="nav-li">Meine Fragen</a>
-        <a href="#" class="nav-li">Favoriten</a>
+        <a href="explore.html" class="nav-li">Entdecken</a>
+        <a href="my-questions.html" class="nav-li">Meine Fragen</a>
+        <a href="my-favorites.html" class="nav-li">Favoriten</a>
       </div>
       <div class="flex-container flex-column gap-1">
         <a href="settings.html" class="nav-li flex-container align-center gap-1"><i class="material-icons" style="color: inherit;">settings</i>Einstellungen</a>
@@ -35,12 +35,12 @@
       </div>
     </nav>
     <main class="main-content flex-container flex-column">
-      <div class="tabs flex-container flex-column gap-2">
+      <div id="tabs" class="tabs">
         <ul id="tabs-list" class="tabs-list">
           <li class="tabs-item current-tab">Bachelor</li>
           <li class="tabs-item">Master</li>
         </ul>
-        <div class="tabs-content current-tab-content gap-2">
+        <div class="tabs-content current-tab-content">
           <div class="content-filter-container">
             <div class="sort-container">
               <button type="button" class="sort-button button-combo"><i class="material-icons" style="font-size: 28px;">sort</i>Sortieren</button>
@@ -354,10 +354,9 @@
             </article> -->
           </div>         
         </div>
-        <div class="tabs-content gap-2">
-          Dieser Bereich ist in Bearbeitung
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi ea suscipit temporibus rem iure? Facilis labore nihil nemo. Sint, saepe corrupti tenetur facilis maxime eveniet? Alias, possimus! Dolor non perferendis libero, natus corporis et sed at sit cupiditate, tempora laborum!
-          
+        <div class="tabs-content">
+          <p class="empty-tabs-content">Es gibt noch keine Beiträge</p>
+        </div>
       </div>
     </main>
   </body>

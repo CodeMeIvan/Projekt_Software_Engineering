@@ -112,10 +112,13 @@ const currentUser =
 {
   username: "Tester",
   userPicture: randomizeBackground(),
-  posts: [],
+  followList : ['Requirements Engineering', "Wissenschaftliches Arbeiten", "Finanzierung"], // equals posts.course
+  posts: ["post-1"], // equals posts.postID
   comments: [],
   favoritePosts: []
 };
+
+let currentlyRenderedPosts;
 
 // track scrolling behavior
 let scrollingEnabled = true;
@@ -123,14 +126,15 @@ let scrollingEnabled = true;
 function disableScroll() {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   const scrollLeft = window.pageYOffset || document.documentElement.scrollTop;
+  
+  window.onscroll = () => window.scrollTo(scrollLeft, scrollTop);
+};
 
-  window.onscroll = () => {
-    window.scrollTo(scrollLeft, scrollTop);
-  }
-}
+
 
 function enableScroll() {
   window.onscroll = function () { };
+
 }
 
 function randomizeBackground() {
@@ -186,6 +190,30 @@ function timeSince(date) {
     
 // --------------------load posts feed--------------------
 
+const tabs = document.getElementById('tabs');
+const tabsContent = document.getElementsByClassName('tabs-content');
+
+tabs.addEventListener('click', (event) => {
+  // if not current tab is clicked do this
+  if(event.target.matches('.tabs-item') && !event.target.classList.contains('current-tab')) {
+    const tabItems = Array.from(event.target.parentElement.children);
+    const currentTab = tabItems.find((tabItem) => {
+      return tabItem.matches('.current-tab');
+    })
+    const indexCurrentTab = tabItems.indexOf(currentTab);
+    const indexNewTab = tabItems.indexOf(event.target);
+
+    // switch between current tab items
+    currentTab.classList.toggle('current-tab');
+    event.target.classList.toggle('current-tab');
+    // switch between current tab content
+    tabsContent[indexCurrentTab].classList.toggle('current-tab-content');
+    tabsContent[indexNewTab].classList.toggle('current-tab-content');
+
+  }
+})
+
+
 const postsFeed = document.getElementById('posts-feed');
 
 function closeCommentSection(event) {
@@ -208,11 +236,11 @@ function followCourse(e) {
   let courseName = e.currentTarget.parentElement.firstElementChild.attributes[1].textContent;
 
   // check if myFollowList[] includes this course
-  let followed = myFollowList.includes(courseName);
+  let followed = currentUser.followList.includes(courseName);
 
   // add course to myFollowList[] and deactivate follow button
   if(!followed) {
-    myFollowList.push(courseName);
+    currentUser.followList.push(courseName);
     e.target.innerText = "Gefolgt";
     e.target.classList.add('button--inactive');
   }
@@ -222,7 +250,7 @@ function followCourse(e) {
 // follow button is rendered when course is not followed
 function renderFollowButton(post) {
   // check if the user follows post.course
-  let courseFollowed = myFollowList.includes(post.course);
+  let courseFollowed = currentUser.followList.includes(post.course);
 
   let followButton = "";
   
@@ -361,10 +389,42 @@ function renderPostFeed(postsDataset) {
 }
 
 
-
 // when DOM content is loaded render post feed content
 document.addEventListener('DOMContentLoaded', () => {
-  renderPostFeed(posts);
+  // render post feed for the home page
+  if (document.location.pathname.includes('home')) {
+    const homePostFeed = posts.filter((post) => {
+      return currentUser.followList.find((courseName) => courseName === post.course) ? post : null;
+    })
+    currentlyRenderedPosts = homePostFeed;
+    renderPostFeed(homePostFeed);    
+  }
+
+  // render post feed for the explore page
+  if (document.location.pathname.includes('explore')) {
+    currentlyRenderedPosts = posts;
+    renderPostFeed(posts);
+  }
+
+  // render post feed for "my questions" page
+  if (document.location.pathname.includes('my-questions')) {
+    const myQuestionsPostFeed = posts.filter((post) => {
+      return currentUser.posts.find((postID) => postID === post.postID) ? post : null;
+    })
+    currentlyRenderedPosts = myQuestionsPostFeed;
+    renderPostFeed(myQuestionsPostFeed);    
+  }
+
+  // render post feed for "my favorites" page
+  if (document.location.pathname.includes('my-favorites')) {
+    const favoritesPostFeed = posts.filter((post) => {
+      return currentUser.favoritePosts.find((postID) => postID === post.postID) ? post : null;
+    })
+    currentlyRenderedPosts = favoritesPostFeed;
+    renderPostFeed(favoritesPostFeed);    
+  }
+
+
 })
 
 
@@ -844,9 +904,9 @@ postsFeed.addEventListener('submit', (e) => {
     <div class="solution-container">
       <div class="answer-feedback">
         <div class="answer-feedback-result ${userFeedback.color()}">${userFeedback.message()}</div>                
-        <button class="show-solution-button button-ghost" onclick="showExplanation(event)"><i class="material-icons">keyboard_arrow_down</i>Erklärung anzeigen</button>
+        <button class="show-solution-button button-ghost" onclick="showExplanation(event)">Erklärung anzeigen<i class="material-icons">keyboard_arrow_down</i></button>
       </div>
-      <div class="solution-content hidden"><span class="solution-content-heading">Erklärung:</span>${correspondingPost.explanation}</div>
+      <div class="solution-content hidden">${correspondingPost.explanation}</div>
     </div>
     `;
     // render answer feedback container
@@ -972,10 +1032,10 @@ document.body.addEventListener('submit', (event) => {
       case "date":
         // check order type and sort by order type
         descendingOrder ? 
-        sortedFeed = posts.toSorted((a, b) => {
+        sortedFeed = currentlyRenderedPosts.toSorted((a, b) => {
           return b.postDate - a.postDate;
         }) 
-        : sortedFeed = posts.toSorted((a, b) => {
+        : sortedFeed = currentlyRenderedPosts.toSorted((a, b) => {
           return a.postDate - b.postDate;
         });
         
@@ -983,10 +1043,10 @@ document.body.addEventListener('submit', (event) => {
         case "likes":
           
           descendingOrder ? 
-          sortedFeed = posts.toSorted((a, b) => {
+          sortedFeed = currentlyRenderedPosts.toSorted((a, b) => {
             return b.likes - a.likes;
           }) 
-          : sortedFeed = posts.toSorted((a, b) => {
+          : sortedFeed = currentlyRenderedPosts.toSorted((a, b) => {
             return a.likes - b.likes;
           });
           
@@ -994,10 +1054,10 @@ document.body.addEventListener('submit', (event) => {
           case "comments":
             
             descendingOrder ? 
-            sortedFeed = posts.toSorted((a, b) => {
+            sortedFeed = currentlyRenderedPosts.toSorted((a, b) => {
               return b.comments.length - a.comments.length;
             }) 
-            : sortedFeed = posts.toSorted((a, b) => {
+            : sortedFeed = currentlyRenderedPosts.toSorted((a, b) => {
               return a.comments.length - b.comments.length;
             });
 

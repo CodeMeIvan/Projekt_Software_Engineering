@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="style/main-style.css">
+      <!-- <script src="main.js" defer></script> -->
+      <script src="database-dummy.js" defer></script>
+      <link rel="shortcut icon" href="icons/app_logo.svg" type="image/x-icon">
+      <title>Entdecken</title>
+  </head>
+  <body class="flex-container justify-center align-center">
+    <header class="main-header flex-container justify-between align-center">
+      <a href="home.html" class="app-logo app-logo--header flex-container align-center gap-1"><img src="icons/app_logo.svg" alt="Logo" srcset="" style="height: 1.75rem;">IUnity</a>
+      <div class="search-bar">
+        <i class="search-icon material-icons">search</i>
+        <input type="search" name="search-input" id="search-input" class="search-input input-field" placeholder="Fach suchen">
+      </div>
+      <button type="button"><a href="add-new-question.html" class="button-secondary button-combo"><i class="material-icons">library_add</i>Beitrag erstellen</a></button>
+    </header>
+    <nav class="main-nav flex-container flex-column justify-between">
+      <div class="flex-container flex-column gap-1">
+        <a href="home.html" class="nav-li">Startseite</a>
+        <a href="#" class="nav-li current-page">Entdecken</a>
+        <a href="my-questions.html" class="nav-li">Meine Fragen</a>
+        <a href="my-favorites.html" class="nav-li">Favoriten</a>
+      </div>
+      <div class="flex-container flex-column gap-1">
+        <a href="settings.html" class="nav-li flex-container align-center gap-1"><i class="material-icons" style="color: inherit;">settings</i>Einstellungen</a>
+        <button type="button" class="nav-li flex-container align-center gap-1"><i class="material-icons" style="color: inherit;">exit_to_app</i>Abmelden</button>
+      </div>
+    </nav>
+    <main class="main-content flex-container flex-column">
+      <div id="tabs" class="tabs">
+        <ul id="tabs-list" class="tabs-list">
+          <li class="tabs-item current-tab">Bachelor</li>
+          <li class="tabs-item">Master</li>
+        </ul>
+        <div class="tabs-content current-tab-content">
+          <div class="content-filter-container">
+            <div class="sort-container">
+              <button type="button" class="sort-button button-combo"><i class="material-icons" style="font-size: 28px;">sort</i>Sortieren</button>
+              <div class="popover hidden"></div>
+              <div class="popover-content hidden">
+                <form action="" id="sort-feed-form" class="sort-feed-form">
+                  <div class="field-set">
+                    <p class="field-set-description">Sortieren nach:</p>
+                    <label class="sort-option checkmark-label" title="Nach Datum sortieren">
+                      <input type="radio" name="sortBy" value="date" checked>
+                      <span class="custom-checkmark"></span>
+                      <p class="checkmark-label-content">Datum</p>
+                    </label>
+                    <label class="sort-option checkmark-label" title="Nach Likes sortieren">
+                      <input type="radio" name="sortBy" value="likes">
+                      <span class="custom-checkmark"></span>
+                      <p class="checkmark-label-content">Likes</p>
+                    </label>
+                    <label class="sort-option checkmark-label" title="Nach Kommentaren sortieren">
+                      <input type="radio" name="sortBy" value="comments">
+                      <span class="custom-checkmark"></span>
+                      <p class="checkmark-label-content">Kommentaren</p>
+                    </label>
+                  </div>
+                  <div class="field-set">
+                    <p class="field-set-description">Reihenfolge:</p>
+                    <label class="sort-option checkmark-label" title="Absteigend sortieren">
+                      <input type="radio" name="sortOrder" value="descending" checked>
+                      <span class="custom-checkmark"></span>
+                      <p class="checkmark-label-content">Absteigend</p>
+                    </label>                    
+                    <label class="sort-option checkmark-label" title="Aufsteigend sortieren">
+                      <input type="radio" name="sortOrder" value="ascending">
+                      <span class="custom-checkmark"></span>
+                      <p class="checkmark-label-content">Aufsteigend</p>
+                    </label>
+                  </div>
+                </form>
+                <button form="sort-feed-form" type="submit" class="button-secondary">Änderungen anwenden</button>
+              </div>
+            </div>
+            <!-- <select name="" id="" class="select-input">
+              <optgroup label="Welcher Studiengang interessiert dich?">
+                <option value="alle" class="select-option">Alle Studiengänge</option>                
+                <option value="mathematik" class="select-option">Mathematik</option>                
+                <option value="wirtschaftsinformatik" class="select-option">Wirtschaftsinformatik</option>                
+              </optgroup>
+            </select> -->
+          </div>
+          <div class="divider"></div>
+          <div id="posts-feed" class="posts-feed">
+          </div>         
+        </div>
+        <div class="tabs-content">
+          <p class="empty-tabs-content">Es gibt noch keine Beiträge</p>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
