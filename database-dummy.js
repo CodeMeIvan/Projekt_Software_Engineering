@@ -11,7 +11,7 @@
 //  Beitrag-speichern-Button animiert, noch keine Funktion
 //  Erklärung lässt sich ein- und ausblenden
 
-const posts = [
+let posts = [
   {
     postID: "post-1",
     postDate: new Date("2025-11-11T23:20:00Z"),
@@ -117,6 +117,11 @@ const currentUser =
   comments: [],
   favoritePosts: []
 };
+
+
+if(sessionStorage.getItem('posts') === null) {
+  sessionStorage.setItem("posts", JSON.stringify(posts));
+} 
 
 let currentlyRenderedPosts;
 
@@ -391,6 +396,12 @@ function renderPostFeed(postsDataset) {
 
 // when DOM content is loaded render post feed content
 document.addEventListener('DOMContentLoaded', () => {
+  if(sessionStorage.getItem('posts') !== null) {
+    const storagePosts = JSON.parse(sessionStorage.getItem('posts'));
+    const newPostsExist = posts.length < storagePosts.length ? true : false;
+    newPostsExist ? posts = storagePosts : null;
+  }
+  
   // render post feed for the home page
   if (document.location.pathname.includes('home')) {
     const homePostFeed = posts.filter((post) => {
@@ -688,7 +699,7 @@ function openCommentSection(event) {
                       <i class="material-icons like-color">favorite</i>
                     </div>
                   </div>
-                  <span class="user-feedback-counter">12</span>
+                  <span class="user-feedback-counter">${correspondingPost.likes}</span>
                 </button>                  
                 <label for="comment-input" class="comment-button user-feedback-button" title="Kommentar schreiben">
                   <div class="button-icon"><i class="material-icons">chat_bubble_outline</i></div>              

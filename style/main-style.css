@@ -261,25 +261,21 @@ a {
 #----components {}
 
 .alert {
-    /* position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
-    z-index: var(--z-index-lvl-top);
-    background-color: var(--main-fg);
-    color: var(--main-bg);
-    padding: 1.5rem;
-    border-radius: var(--border-radius-l);
-    font-size: var(--f-size-16);
-    line-height: var(--lh-f-size-16);
-}
-
-.alert-warning {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1.5rem;
+    z-index: var(--z-index-lvl-top);
+    background-color: var(--main-fg);
+    color: var(--main-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-l);
+}
+
+.alert-message {
+    font-size: var(--f-size-16);
+    line-height: var(--lh-f-size-16);
 }
 
 .checkmark-label,
@@ -1457,11 +1453,16 @@ ul.flex-container {
 #----add_question_page {}
 
 .add-question {
+    display: flex;
+    justify-content: center;
     padding: 2rem;
 }
 
 .add-question .form-container {
     width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-4);
 }
 
 .add-question .form-field {
@@ -1469,7 +1470,7 @@ ul.flex-container {
 }
 
 .add-question .form-field-label {
-    width: 200px;
+    width: 200px; /* required for consistent input width within its parent container*/
 }
 
 .add-question .select-input,

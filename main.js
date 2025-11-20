@@ -211,39 +211,84 @@ actionOnEachElement(showSolutionButton, showSolution);
 // --------------------comment section: answer feedback--------------------
 
 // --------------------add_new_question: cancel progress and go back--------------------
-const alertCancelButton = document.getElementsByClassName('alert-cancel-button');
-const alertConfirmButton = document.getElementsByClassName('alert-confirm-button');
-
-function closeModal(modal) {    
-    modal.addEventListener('click', (e) => {
-        if(e.target === modal) {
-            modal.classList.toggle('.hidden');
-        }
-    })
+function confirmCancellation(event) {
+  const isTargetModal = event.target.matches('.modal');
+  const isTargetRejectButton = event.target.matches('.reject-button');
+	const isTargetConfirmButton = event.target.matches('.confirm-button');
+  
+	// check if click target is modal or reject button then close the alert
+  isTargetModal || isTargetRejectButton ? event.currentTarget.remove() : null;
+	// check if history exists then go back 1 page else go to home page
+	if (isTargetConfirmButton && history.length > 1) {
+		history.go(-1);
+	} else if(isTargetConfirmButton) {
+		location.assign('home.html');
+	}
 }
-
-function negativeConfirmation(event) {
-    event.currentTarget.parentElement.parentElement.parentElement.style.display = 'none';
-    }
-
-function positiveConfirmation(event) {
-    if(history.length > 1) {
-        history.go(-1);
-    } else {
-        location.assign('home.html');
-    }
-}
-
-
 
 function cancelPostCreation() {
-    const alertWarning = document.body.firstElementChild;
-    alertWarning.style.display = 'flex';
-    
-    closeModal(alertWarning);
-}
+	const body = document.body;
+	const alert = 
+	`
+	<div class="modal" onclick="confirmCancellation(event)">
+      <div class="alert">
+        <p class="alert-message">Sind Sie sicher, dass Sie die Erstellung jetzt abbrechen wollen?</p>
+        <div class="flex-container gap-2">
+          <button type="button" class="reject-button button-tertiary">Nicht abbrechen</button>
+          <button type="button" class="confirm-button button-primary">Ja, abbrechen</button>
+        </div>
+      </div>
+    </div>
+	`;
 
+	body.insertAdjacentHTML('afterbegin', alert);
+
+}
 // --------------------add_new_question: cancel progress and go back--------------------
+const addQuestionMain = document.getElementById('add-question');
+const currentUser = {username: "Tester"};
+const posts = JSON.parse(sessionStorage.getItem('posts'));
+
+addQuestionMain.addEventListener('submit', (event) => {
+	// stop the default submit event, data is not send to a server
+  event.preventDefault();
+
+  // collect user input
+  const formData = new FormData(event.target);
+  const entries = Object.fromEntries(formData.entries());
+
+	// check if privatePost was selected
+	const postStatus = Object.keys(entries).includes("privatePost") ? true : false;
+	const submittedAnswers = [];
+	// get answer contents and push to submittedAnswers[]
+	Object.entries(entries).filter((element) => element[0].includes('content')).forEach((answerContent) => submittedAnswers.push(answerContent[1]));
+	// get correct answers options selected by the user
+	const correctAnswer = Object.keys(entries).filter((key) => key.includes('answer'));
+
+	const newPost = {
+    postID: `post-${posts.length + 1}`,
+    postDate: new Date(),
+    author: currentUser.username,
+    degree: entries.degree,
+    course: entries.course,
+    questionType: entries.questionType,
+    question: entries.question, 
+    answers: submittedAnswers, 
+    correctAnswer: correctAnswer,
+    explanation: entries.explanation,
+    privatePost: postStatus,
+    likes: 0,
+    comments: []
+  };
+	
+	posts.push(newPost);
+	
+	sessionStorage.setItem('posts', JSON.stringify(posts));
+
+	history.length > 1 ? history.go(-1) : location.assign('home.html');
+})
+
+console.log(posts)
 
 
 // --------------------add_new_question: add additional answer option--------------------

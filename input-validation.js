@@ -7,6 +7,18 @@ const users = [
   {username: "tutor", email: "tutor@iu.org", password: "tutor1234567"}
 ];
 
+const currentUser = 
+{
+  username: "Tester",
+  userPicture: randomizeBackground(),
+  followList : ['Requirements Engineering', "Wissenschaftliches Arbeiten", "Finanzierung"], // equals posts.course
+  posts: ["post-1"], // equals posts.postID
+  comments: [],
+  favoritePosts: []
+};
+
+sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+
 
 const loginForm = document.querySelector("#login-form");
 const loginEmail = document.querySelector("#login-e-mail");

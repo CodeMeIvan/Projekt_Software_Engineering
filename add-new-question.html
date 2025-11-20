@@ -11,92 +11,82 @@
       <script src="main.js" defer></script>
       <!-- <script src="database-dummy.js" defer></script> -->
       <link rel="shortcut icon" href="icons/app_logo.svg" type="image/x-icon">
-      <title>IUnity - Frage stellen</title>
+      <title>Beitrag erstellen</title>
   </head>
   <body>
-    <div class="modal hidden">
-      <div class="alert alert-warning">Sind Sie sicher, dass Sie die Erstellung jetzt abbrechen wollen?
-        <div class="flex-container gap-2">
-          <button type="button" class="alert-cancel-button button-tertiary" onclick="negativeConfirmation(event);
-          ">Nein, nicht abbrechen</button>
-          <button type="button" class="alert-confirm-button button-primary" onclick="positiveConfirmation()">Ja, abbrechen</button>
-        </div>
-      </div>
-    </div>
-    <main class="add-question flex-container justify-center">
-      <div class="form-container flex-container flex-column gap-4">
-        <h1 class="form-heading">Neue Frage stellen</h1>
-        <form action="" class="flex-container flex-column gap-3">
+    <main id="add-question" class="add-question">
+      <div class="form-container">
+        <h1 class="form-heading">Beitrag erstellen</h1>
+        <form action="" id="add-question-form" class="flex-container flex-column gap-3">
           <div class="form-field">
-              <label for="" class="form-field-label">Studiengang</label>
-              <select name="" id="" class="select-input">
+              <label for="degree-selection" class="form-field-label">Studiengang</label>
+              <select name="degree" id="degree-selection" class="select-input">
                 <optgroup label="Bachelor">
-                  <option value="1" class="select-option">B.Sc. Informatik</option>
-                  <option value="1" class="select-option">B.Sc. Wirtschaftsinformatik</option>
+                  <option value="B.Sc. Informatik" class="select-option">B.Sc. Informatik</option>
+                  <option value="B.Sc. Wirtschaftsinformatik" class="select-option">B.Sc. Wirtschaftsinformatik</option>
                 </optgroup>
                 <optgroup label="Master">
-                  <option value="1" class="select-option">M.Sc. Informatik</option>
-                  <option value="1" class="select-option">M.Sc. Wirtschaftsinformatik</option>
+                  <option value="M.Sc. Informatik" class="select-option">M.Sc. Informatik</option>
+                  <option value="M.Sc. Wirtschaftsinformatik" class="select-option">M.Sc. Wirtschaftsinformatik</option>
                 </optgroup>
               </select>
           </div>
           <div class="form-field">
-              <label for="" class="form-field-label">Kurs</label>
-              <select name="" id="" class="select-input">
-                <option value="1" class="select-option">Requirements Engineering</option>
-                <option value="1" class="select-option">Wissenschaftliches Arbeiten</option>              
+              <label for="course-selection" class="form-field-label">Kurs</label>
+              <select name="course" id="course-selection" class="select-input">
+                <option value="Requirements Engineering" class="select-option">Requirements Engineering</option>
+                <option value="Wissenschaftliches Arbeiten" class="select-option">Wissenschaftliches Arbeiten</option>              
               </select>
           </div>
           <div class="form-field">
-              <label for="" class="form-field-label">Fragetyp</label>
-              <div class="flex-container flex-column gap-1 w-fill">
-                <select name="" id="" class="select-input">
-                  <option value="multiple-choice" class="select-option" selected title="Mindestens eine richtige Antwort aus vielen">Multiple-Choice</option>
-                  <option value="wahr-oder-falsch" class="select-option">Wahr-oder-Falsch</option>
-                  <option value="offene-frage" class="select-option">Offene Frage</option>              
-                  <option value="community-frage" class="select-option" title="Frage deine Kommilitonen über Beliebiges">Community-Frage</option>              
-                </select>
-              </div>
+              <label for="question-type-selection" class="form-field-label">Fragetyp</label>
+              <select name="questionType" id="question-type-selection" class="select-input">
+                <option value="Multiple-Choice" class="select-option" selected title="Mindestens eine richtige Antwort aus vielen">Multiple-Choice</option>
+                <option value="Wahr-oder-Falsch" class="select-option" title="Ist die Aussage richtig oder falsch">Wahr-oder-Falsch</option>            
+              </select>
           </div>
           <div class="form-field">
-              <label for="" class="form-field-label">Fragestellung</label>
-              <textarea name="" id="" class="question-input input-field auto-grow-element" rows="3" placeholder="Formulieren Sie eine Frage"></textarea>          
+              <label for="question" class="form-field-label">Fragestellung</label>
+              <textarea name="question" id="question" class="question-input input-field auto-grow-element" rows="3" placeholder="Formulieren Sie eine Frage" maxlength="400" minlength="3" required></textarea>          
           </div>          
           <div class="form-field">
-            <label for="answer-1-input" class="form-field-label">Antwortmöglichkeiten</label>
+            <label for="answer1-input" class="form-field-label">Antwortmöglichkeiten</label>
             <div class="flex-container flex-column gap-2 w-fill">
               <div class="possible-answers-container flex-container flex-column gap-2">              
                 <div class="possible-answer">
-                  <label for="answer-1" class="checkmark-container" title="Wählen Sie die richtige Antwort aus">
-                    <input type="checkbox" name="answer-1" id="answer-1" class="possible-answer-checkbox">
+                  <label for="answer1" class="checkmark-container" title="Wählen Sie die richtige Antwort aus">
+                    <input type="checkbox" name="answer1" id="answer1" class="possible-answer-checkbox">
                     <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
                   </label>
-                  <textarea name="" id="answer-1-input" class="possible-answer-input auto-grow-element" rows="1" placeholder="Antwort 1"></textarea>
-                </div>
+                  <textarea name="contentAnswer1" id="answer1-input" class="possible-answer-input auto-grow-element" rows="1" placeholder="Antwort 1" maxlength="200" required></textarea>
+                </div>              
                 <div class="possible-answer">
-                  <label for="answer-2" class="checkmark-container" title="Wählen Sie die richtige Antwort aus">
-                    <input type="checkbox" name="answer-2" id="answer-2" class="possible-answer-checkbox">
+                  <label for="answer2" class="checkmark-container" title="Wählen Sie die richtige Antwort aus">
+                    <input type="checkbox" name="answer2" id="answer2" class="possible-answer-checkbox">
                     <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
                   </label>
-                  <textarea name="" id="answer-2-input" class="possible-answer-input auto-grow-element" rows="1" placeholder="Antwort 2"></textarea>
-                </div>
+                  <textarea name="contentAnswer2" id="answer2-input" class="possible-answer-input auto-grow-element" rows="1" placeholder="Antwort 2" maxlength="200" required></textarea>
+                </div>              
               </div>
               <p class="input-field-description">Wählen Sie die richtige Antwort bzw. die richtigen Antworten aus</p>
-              <button type="button" class="button-ghost button-combo m-top" onclick="addAnswerOption()"><i class="material-icons" style="color: inherit;">add</i>Antwort hinzufügen</button>                   
+              <button type="button" class="button-ghost button-combo m-top" onclick="addAnswerOption()">
+                <i class="material-icons" style="color: inherit;">add</i>
+                Antwort hinzufügen
+              </button>
             </div>
-          </div>                    
+          </div>
           <div class="form-field">
-              <label for="" class="form-field-label">Erklärung</label>
-              <textarea name="" id="" class="explanation-input input-field auto-grow-element" rows="3" placeholder="Fügen Sie eine Erklärung zur richtigen Antwort hinzu"></textarea>       
+              <label for="explanation-input" class="form-field-label">Erklärung</label>
+              <textarea name="explanation" id="explanation-input" class="explanation-input input-field auto-grow-element" rows="3" placeholder="Fügen Sie eine Erklärung zur richtigen Antwort hinzu" maxlength="600" required></textarea>
           </div>
           <label for="private-post" class="checkbox-label">
-            <input type="checkbox" value="private-post" id="private-post" class="post-status-checkbox">
+            <input type="checkbox" name="privatePost" id="private-post" class="post-status-checkbox">
             <span class="custom-checkbox"></span>
             Beitrag nur für mich sichtbar
           </label>
           <div class="flex-container justify-center align-center gap-2 m-top">
             <button type="button" class="button-tertiary" onclick="cancelPostCreation()">Abbrechen</button>          
-            <button type="submit"><a href="home.html" class="button-primary">Frage stellen</a></button>          
+            <button form="add-question-form" type="submit" class="button-primary">Beitrag erstellen</button>          
           </div>
       </div>
     </main>
