@@ -44,14 +44,14 @@ function switchCurrentTab(tabItem) {
 }
 
 // run function
-actionOnEachElement(tabItems, switchCurrentTab);
+// actionOnEachElement(tabItems, switchCurrentTab);
 
 // --------------------switch between current tabs--------------------
 
 
 // --------------------filter main feed--------------------
-const sortContainer = document.getElementsByClassName('sort-container');
-const sortButton = document.getElementsByClassName('sort-button');
+// const sortContainer = document.getElementsByClassName('sort-container');
+// const sortButton = document.getElementsByClassName('sort-button');
 
 // sortButton[0].addEventListener('click', (e) => {
 //     log(e.currentTarget)
@@ -60,23 +60,6 @@ const sortButton = document.getElementsByClassName('sort-button');
 // })
 
 // change color of current selection
-function changeColorRadioChecked(radio) {
-    radio.addEventListener('click', (e) => {
-        // check if the target isnt already selected
-        if(e.target.classList.contains('radio-container') && e.target.children[0].checked == false) {            
-            // change the color of the previous selection
-            if(e.target.parentElement.firstElementChild.innerText === "Zeitraum:") {
-                currentSortTimeline.parentElement.classList.toggle('input-checked');
-                currentSortTimeline = e.target.children[0];
-            } else {
-                currentSortOption.parentElement.classList.toggle('input-checked');
-                currentSortOption = e.target.children[0];
-            }
-            // apply color change to selection
-            e.target.classList.toggle('input-checked');                        
-        }
-    })
-}
 
 // actionOnEachElement(radioContainer, changeColorRadioChecked);
 
@@ -85,7 +68,7 @@ function changeColorRadioChecked(radio) {
 
 // --------------------comment section--------------------
 
-const userFeedbackCommentButton = document.getElementsByClassName('user-feedback-comment');
+// const userFeedbackCommentButton = document.getElementsByClassName('user-feedback-comment');
 
 // actionOnEachElement(userFeedbackCommentButton, log);
 
@@ -94,18 +77,18 @@ const userFeedbackCommentButton = document.getElementsByClassName('user-feedback
 
 // <<--------------------like animation--------------------
 
-const animationContainer = document.getElementsByClassName('animation-container');
+// const animationContainer = document.getElementsByClassName('animation-container');
 
-function addAnimationToLikeButton(likeButton) {
-    likeButton.addEventListener('click', (e) => {
-        likeButton.firstElementChild.classList.toggle('hide-visibility');
-        likeButton.children[1].classList.toggle('hide-visibility');
-        likeButton.children[1].firstElementChild.classList.toggle('like-animation');
-    })
+// function addAnimationToLikeButton(likeButton) {
+//     likeButton.addEventListener('click', (e) => {
+//         likeButton.firstElementChild.classList.toggle('hide-visibility');
+//         likeButton.children[1].classList.toggle('hide-visibility');
+//         likeButton.children[1].firstElementChild.classList.toggle('like-animation');
+//     })
     
-}
+// }
 
-actionOnEachElement(animationContainer, addAnimationToLikeButton);
+// actionOnEachElement(animationContainer, addAnimationToLikeButton);
 
 // --------------------like animation-------------------->>
 
@@ -124,89 +107,89 @@ function setElementToAutoGrow(inputElement) {
   })
 }
 
-actionOnEachElement(autoGrowElements, setElementToAutoGrow);
+// actionOnEachElement(autoGrowElements, setElementToAutoGrow);
 // --------------------auto-grow input elements--------------------
 
 
 // --------------------set user profile pictures--------------------
-const userProfilePicture = document.getElementsByClassName('user-profile-picture');
+// const userProfilePicture = document.getElementsByClassName('user-profile-picture');
 
-const profilePictureColors = ['crimson', 'darkcyan', 'darkolivegreen', 'darkmagenta', 'darkslateblue', 'darkslategrey', 'green', 'midnightblue'];
+// const profilePictureColors = ['crimson', 'darkcyan', 'darkolivegreen', 'darkmagenta', 'darkslateblue', 'darkslategrey', 'green', 'midnightblue'];
 
-function getRndInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
-}
+// function getRndInteger(min, max) {
+//   return Math.floor(Math.random() * (max - min + 1) ) + min;
+// }
 
-function setUserProfilePicture(user) {
-    let randomizedColor = getRndInteger(0, 7);
-    user.style.backgroundColor = profilePictureColors[randomizedColor];
-}
+// function setUserProfilePicture(user) {
+//     let randomizedColor = getRndInteger(0, 7);
+//     user.style.backgroundColor = profilePictureColors[randomizedColor];
+// }
 
-actionOnEachElement(userProfilePicture, setUserProfilePicture);
+// actionOnEachElement(userProfilePicture, setUserProfilePicture);
 
 // --------------------set user profile pictures--------------------
 
 
 // --------------------set modal-content height based on post-section height--------------------
-const modalContent = document.getElementsByClassName('modal-content');
+// const modalContent = document.getElementsByClassName('modal-content');
 
-function setModalContentHeight(modal) {
-    let postSectionHeight = modal.firstElementChild.clientHeight;
+// function setModalContentHeight(modal) {
+//     let postSectionHeight = modal.firstElementChild.clientHeight;
 
-    modal.style.height = postSectionHeight +'px';
-}
+//     modal.style.height = postSectionHeight +'px';
+// }
 
-actionOnEachElement(modalContent, setModalContentHeight)
+// actionOnEachElement(modalContent, setModalContentHeight)
 
 // --------------------set modal-content height based on post-section height--------------------
 
 
 // --------------------comment section: answer feedback--------------------
-const submitAnswer = document.getElementsByClassName('submit-answer');
-const showSolutionButton = document.getElementsByClassName('show-solution-button');
-const solutionContent = document.getElementsByClassName('solution-content');
+// const submitAnswer = document.getElementsByClassName('submit-answer');
+// const showSolutionButton = document.getElementsByClassName('show-solution-button');
+// const solutionContent = document.getElementsByClassName('solution-content');
 
 
-function showAnswerFeedback(submitAnswerButton) {
-    submitAnswerButton.addEventListener('click', (e) => {
+// function showAnswerFeedback(submitAnswerButton) {
+//     submitAnswerButton.addEventListener('click', (e) => {
         // let postSectionHeight = submitAnswerButton.parentElement.parentElement.parentElement.parentElement.clientHeight;
 
-        submitAnswerButton.classList.add('hidden');
-        submitAnswerButton.parentElement.parentElement.nextElementSibling.classList.remove('hidden');
+        // submitAnswerButton.classList.add('hidden');
+        // submitAnswerButton.parentElement.parentElement.nextElementSibling.classList.remove('hidden');
 
         // submitAnswerButton.parentElement.parentElement.parentElement.parentElement.style.height = postSectionHeight +'px';
-    })
+    // })
 
     // submitAnswerButton.addEventListener('click', (e) => {
     //     submitAnswerButton.parentElement.parentElement.nextElementSibling.scrollIntoView();
     // })
-}
+// }
 
-actionOnEachElement(submitAnswer, showAnswerFeedback);
+// actionOnEachElement(submitAnswer, showAnswerFeedback);
 
-function showSolution(solutionButton) {
-    solutionButton.addEventListener('click', (e) => {
-        if(solutionButton.parentElement.nextElementSibling.classList.contains('hidden')) {
-            log('is hidden')
-            solutionButton.firstElementChild.style.transform = 'rotate(180deg)';
-        } else {
-            solutionButton.firstElementChild.style.transform = 'rotate(0deg)';
-        }
+// function showSolution(solutionButton) {
+//     solutionButton.addEventListener('click', (e) => {
+//         if(solutionButton.parentElement.nextElementSibling.classList.contains('hidden')) {
+//             log('is hidden')
+//             solutionButton.firstElementChild.style.transform = 'rotate(180deg)';
+//         } else {
+//             solutionButton.firstElementChild.style.transform = 'rotate(0deg)';
+//         }
 
-        log(solutionButton)
-        let postSectionHeight = solutionButton.parentElement.parentElement.parentElement.parentElement.clientHeight;
+//         log(solutionButton)
+//         let postSectionHeight = solutionButton.parentElement.parentElement.parentElement.parentElement.clientHeight;
 
-        solutionButton.parentElement.nextElementSibling.classList.toggle('hidden');
+//         solutionButton.parentElement.nextElementSibling.classList.toggle('hidden');
         
-        solutionButton.parentElement.parentElement.parentElement.parentElement.style.height = postSectionHeight +'px';
-    })
+//         solutionButton.parentElement.parentElement.parentElement.parentElement.style.height = postSectionHeight +'px';
+//     })
 
-    solutionButton.addEventListener('click', (e) => {
-        solutionButton.parentElement.nextElementSibling.scrollIntoView();
-    })
-}
+//     solutionButton.addEventListener('click', (e) => {
+//         solutionButton.parentElement.nextElementSibling.scrollIntoView();
+//     })
+// }
 
-actionOnEachElement(showSolutionButton, showSolution);
+// actionOnEachElement(showSolutionButton, showSolution);
 
 // --------------------comment section: answer feedback--------------------
 
@@ -247,8 +230,8 @@ function cancelPostCreation() {
 
 // --------------------add_new_question: cancel progress and go back--------------------
 const addQuestionMain = document.getElementById('add-question');
-const currentUser = {username: "Tester"};
 const posts = JSON.parse(sessionStorage.getItem('posts'));
+const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 
 addQuestionMain.addEventListener('input', (event) => {
 	// console.log(event.target)
@@ -380,9 +363,13 @@ addQuestionMain.addEventListener('submit', (event) => {
 			};
 				
 			posts.push(newPost);
-			
+			currentUser.posts.push(newPost.postID);
+
 			sessionStorage.setItem('posts', JSON.stringify(posts));
+			sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+			sessionStorage.setItem('postAdded', "true");
 			
+
 			history.length > 1 ? history.go(-1) : location.assign('home.html');
 				
 		} else {
@@ -416,9 +403,11 @@ addQuestionMain.addEventListener('submit', (event) => {
 			}
 	
 			posts.push(newPost);
-				
+			currentUser.posts.push(newPost.postID);
+
 			sessionStorage.setItem('posts', JSON.stringify(posts));
-			
+			sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+			sessionStorage.setItem('postAdded', "true");
 			history.length > 1 ? history.go(-1) : location.assign('home.html');
 
 		} else {
@@ -427,7 +416,7 @@ addQuestionMain.addEventListener('submit', (event) => {
 	}
 })
 
-console.log(posts)
+// console.log(posts)
 
 
 // --------------------add_new_question: add additional answer option--------------------

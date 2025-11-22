@@ -108,22 +108,42 @@ let posts = [
   }
 ];
 
-const currentUser = 
+let currentUser = 
 {
   username: "Tester",
   userPicture: randomizeBackground(),
   followList : ['Requirements Engineering', "Wissenschaftliches Arbeiten", "Finanzierung"], // equals posts.course
   posts: ["post-1"], // equals posts.postID
+  likedPosts: [],
   comments: [],
   favoritePosts: []
 };
 
-console.log(posts)
 
+// check if session storage has posts then setup posts in the storage
 if(sessionStorage.getItem('posts') === null) {
   sessionStorage.setItem("posts", JSON.stringify(posts));
-} 
 
+} else if(sessionStorage.getItem('postAdded')) { // if session storage has posts then update posts to include any changes on the posts item
+  posts = JSON.parse(sessionStorage.getItem('posts'));
+  // inform the user about action success
+  alertUser('Beitrag erfolgreich erstellt!');
+  // after alert remove item from storage
+  sessionStorage.removeItem('postAdded');
+  
+} else { // if session storage has posts then update posts to include any changes on the posts item
+  posts = JSON.parse(sessionStorage.getItem('posts'));  
+}
+
+// check if session storage has currentUser then setup currentUser in the storage
+if(sessionStorage.getItem('currentUser') === null) {
+  sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
+  // if session storage has currentUser update currentUser to include any changes on the currentUser item
+} else {
+  currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+}
+
+// track currently rendered post feed
 let currentlyRenderedPosts;
 
 // track scrolling behavior
@@ -151,14 +171,6 @@ function randomizeBackground() {
   
   return backgroundColors[getRndInteger(0, 7)];
 }
-
-const myFollowList = ['Requirements Engineering', 'Wissenschaftliches Arbeiten'];
-
-const myFavorites = [{postID: "post-1"}, {postID: "post-2"}];
-
-const myQuestions = [{postID: "post-1"}];
-
-// console.log(randomizeBackground())
 
 
 // get the time difference between postDate and current time
@@ -193,7 +205,7 @@ function timeSince(date) {
     return "gerade eben";
 }
     
-// --------------------load posts feed--------------------
+// --------------------load post feed--------------------
 
 const tabs = document.getElementById('tabs');
 const tabsContent = document.getElementsByClassName('tabs-content');
@@ -221,6 +233,19 @@ tabs.addEventListener('click', (event) => {
 
 const postsFeed = document.getElementById('posts-feed');
 
+function alertUser(message) {
+  const feedbackMessage = 
+    `
+    <div class="action-feedback">${message}</div>
+    `;
+
+    document.body.insertAdjacentHTML('afterbegin', feedbackMessage);
+    
+    setTimeout(() => {
+      document.body.firstElementChild.remove();
+    }, 3000);
+}
+
 function closeCommentSection(event) {
   const isTargetModal = event.target.matches('.modal');
   const isTargetCloseButton = event.target.matches('.close-button');
@@ -235,26 +260,27 @@ function closeCommentSection(event) {
   }
 }
 
-// follow button adds a course to myFollowList[]
+// follow button adds a course to currentUser.followList[]
 function followCourse(e) {
   // get course name
   let courseName = e.currentTarget.parentElement.firstElementChild.attributes[1].textContent;
 
-  // check if myFollowList[] includes this course
+  // check if currentUser.followList[] includes this course
   let followed = currentUser.followList.includes(courseName);
 
-  // add course to myFollowList[] and deactivate follow button
+  // add course to currentUser.followList[] and deactivate follow button
   if(!followed) {
     currentUser.followList.push(courseName);
+    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+
     e.target.innerText = "Gefolgt";
     e.target.classList.add('button--inactive');
   }
-
 }
 
 // follow button is rendered when course is not followed
 function renderFollowButton(post) {
-  // check if the user follows post.course
+  // check if the currentUser follows post.course
   let courseFollowed = currentUser.followList.includes(post.course);
 
   let followButton = "";
@@ -276,8 +302,10 @@ function renderPostFeed(postsDataset) {
   postsDataset.forEach((post) => {
     const postID = post.postID;
     let answerName = 1;
-    let postDate = new Date(post.postDate)
-    
+    let postDate = new Date(post.postDate);
+    const isPostLiked = currentUser.likedPosts.includes(postID);
+    const isPostSaved = currentUser.favoritePosts.includes(postID);
+
     function renderPostCardContent(questionType) {
       // options array
       let answerContent = [];
@@ -353,9 +381,9 @@ function renderPostFeed(postsDataset) {
           <div class="post-card-footer">
             <div class="flex-container align-center gap-0">
               <button class="like-button user-feedback-button" title="Gefällt mir">
-                <div class="button-icon animation-container" onclick="likePost(event)">
-                  <i class="material-icons">favorite_border</i>
-                  <div class="animation-item hidden">
+                <div class="button-icon animation-container" data-post-id="${post.postID}" onclick="likePost(event)">
+                  <i class="material-icons ${isPostLiked ? "hidden" : ""}">favorite_border</i>
+                  <div class="animation-item ${!isPostLiked ? "hidden" : ""}">
                     <i class="material-icons like-color">favorite</i>
                   </div>
                 </div>
@@ -371,9 +399,9 @@ function renderPostFeed(postsDataset) {
                 <i class="material-icons" style="transform: scale(-100%, 100%);">reply</i>
               </button>
               <button class="save-post-button user-feedback-button" title="Beitrag speichern">
-                <div class="button-icon animation-container" onclick="savePost(event)">
-                  <i class="material-icons">bookmark_border</i>
-                  <div class="animation-item hidden">
+                <div class="button-icon animation-container" data-post-id="${post.postID}" onclick="savePost(event)">
+                  <i class="material-icons ${isPostSaved ? "hidden" : ""}">bookmark_border</i>
+                  <div class="animation-item ${!isPostSaved ? "hidden" : ""}">
                     <i class="material-icons">bookmark</i>
                   </div>
                 </div>
@@ -396,26 +424,32 @@ function renderPostFeed(postsDataset) {
 
 // when DOM content is loaded render post feed content
 document.addEventListener('DOMContentLoaded', () => {
-  if(sessionStorage.getItem('posts') !== null) {
-    const storagePosts = JSON.parse(sessionStorage.getItem('posts'));
-    const newPostsExist = posts.length < storagePosts.length ? true : false;
-    newPostsExist ? posts = storagePosts : null;
-    console.log(posts)
-  }
   
   // render post feed for the home page
   if (document.location.pathname.includes('home')) {
     const homePostFeed = posts.filter((post) => {
-      return currentUser.followList.find((courseName) => courseName === post.course) ? post : null;
+      return currentUser.followList.find((courseName) => courseName === post.course) 
+      || currentUser.posts.find((userPosts) => userPosts === post.postID) 
+      ? post : null;
     })
-    currentlyRenderedPosts = homePostFeed;
-    renderPostFeed(homePostFeed);    
+    // sort homePostFeed by date in descending order -> newest first
+    currentlyRenderedPosts = homePostFeed.sort((a, b) => { 
+      return new Date(b.postDate) - new Date(a.postDate);
+    });
+
+    renderPostFeed(currentlyRenderedPosts);    
   }
 
   // render post feed for the explore page
   if (document.location.pathname.includes('explore')) {
-    currentlyRenderedPosts = posts;
-    renderPostFeed(posts);
+    const explorePostFeed = posts;
+    
+    // sort explorePostFeed by date in descending order -> newest first
+    currentlyRenderedPosts = explorePostFeed.sort((a, b) => { 
+      return new Date(b.postDate) - new Date(a.postDate);
+    });
+
+    renderPostFeed(currentlyRenderedPosts);
   }
 
   // render post feed for "my questions" page
@@ -423,8 +457,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const myQuestionsPostFeed = posts.filter((post) => {
       return currentUser.posts.find((postID) => postID === post.postID) ? post : null;
     })
-    currentlyRenderedPosts = myQuestionsPostFeed;
-    renderPostFeed(myQuestionsPostFeed);    
+    currentlyRenderedPosts = myQuestionsPostFeed.sort((a, b) => { 
+      return new Date(b.postDate) - new Date(a.postDate);
+    });
+
+    renderPostFeed(currentlyRenderedPosts);    
   }
 
   // render post feed for "my favorites" page
@@ -432,8 +469,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const favoritesPostFeed = posts.filter((post) => {
       return currentUser.favoritePosts.find((postID) => postID === post.postID) ? post : null;
     })
-    currentlyRenderedPosts = favoritesPostFeed;
-    renderPostFeed(favoritesPostFeed);    
+    currentlyRenderedPosts = favoritesPostFeed.sort((a, b) => { 
+      return new Date(b.postDate) - new Date(a.postDate);
+    });
+
+    renderPostFeed(currentlyRenderedPosts);   
   }
 
 
@@ -487,12 +527,6 @@ postsFeed.addEventListener('click', (e) => {
     selectionMade ? submitButton.classList.remove('button--inactive') : submitButton.classList.add('button--inactive')    
   }
 
-  // console.log(e.target.type)
-
-  // if(e.target.matches('.like-button')) {
-  //   console.log(e.target)
-  // }
-  
 })
 
 postsFeed.addEventListener('input', (e) => {
@@ -506,38 +540,59 @@ postsFeed.addEventListener('input', (e) => {
   e.target.style.height = e.target.scrollHeight + inputBorder + "px";
 })
 
-// when user clicks the like button call this function to change the like count
-function changeLikeCount(targetCounter, postLiked, button) {
-  // check if the post has already been liked
-  if(!postLiked) {
-    // if not liked then add a custom like attribute to track like state
-    const likeAttribute = document.createAttribute('data-liked');
-    button.setAttributeNode(likeAttribute);
-    // add +1 to like counter
-    targetCounter.innerText++;
-  } 
-  // if already liked then remove like attribute and subtract -1 from counter
-  else {
-    button.removeAttribute('data-liked');
-    targetCounter.innerText--;
+function toggleLike(list, id) {
+  const index = list.indexOf(id);
+
+  if (index === -1) {
+    list.push(id);       // add post to user's likedPosts
+  } else {
+    list.splice(index, 1); // remove post from user's likedPosts
   }
+
+  return list;
 }
+
 // on like button click trigger this function
 function likePost(event) {
   const likeButton = event.currentTarget;
   const likeAnimationItem = likeButton.children[1];
   const counter = event.currentTarget.nextElementSibling;
-  // check if the like button has the attribute "data-liked"
-  const isPostLiked = likeButton.hasAttribute('data-liked');
+  
+  const postID = likeButton.attributes['data-post-id'].value;
+  const correspondingPost = posts.find((post) => post.postID === postID);
+  const postLikedByCurrentUser = currentUser.likedPosts.includes(postID);
+  
+  // check if the post has already been liked
+  if(!postLikedByCurrentUser) {
+    // display animation when button was clicked
+    likeButton.firstElementChild.classList.toggle('hidden');
+    likeAnimationItem.classList.toggle('hidden');
+    likeAnimationItem.firstElementChild.classList.add('icon-animation');
 
-  // display animation when button was clicked
-  likeButton.firstElementChild.classList.toggle('hidden');
-  likeAnimationItem.classList.toggle('hidden');
-  likeAnimationItem.firstElementChild.classList.toggle('icon-animation');
+    // add +1 to like counter
+    counter.innerText++;
+    correspondingPost.likes++;
+    sessionStorage.setItem('posts', JSON.stringify(posts));
 
-  // call changeLikeCount function and pass arguments from the event
-  changeLikeCount(counter, isPostLiked, likeButton);
+    currentUser.likedPosts = toggleLike(currentUser.likedPosts, postID);
+    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
 
+  } 
+  // if already liked then remove like attribute and subtract -1 from counter
+  else {
+    // display animation when button was clicked
+    likeButton.firstElementChild.classList.toggle('hidden');
+    likeAnimationItem.classList.toggle('hidden');
+    likeAnimationItem.firstElementChild.classList.remove('icon-animation');
+
+    counter.innerText--;
+    correspondingPost.likes--;
+    sessionStorage.setItem('posts', JSON.stringify(posts));
+
+    currentUser.likedPosts = toggleLike(currentUser.likedPosts, postID);
+    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+  }
+    
 }
 
 function setCommentSectionHeight() {
@@ -563,12 +618,11 @@ function openCommentSection(event) {
     return post.postID === postID;
   })
   const postDate = new Date(correspondingPost.postDate);
+  const isPostLiked = currentUser.likedPosts.includes(postID);
+  const isPostSaved = currentUser.favoritePosts.includes(postID);
 
   const answerOptions = event.currentTarget.parentElement.parentElement.parentElement.previousElementSibling.previousElementSibling.firstElementChild.lastElementChild.children;
   const answerOptionsArray = Array.from(answerOptions);
-
-  // console.log(answerOptionsArray)
-  // let answerID = 1;
   
   function renderPostCardContent(questionType) {
     let answerName = 1;
@@ -587,13 +641,14 @@ function openCommentSection(event) {
           <p class="answer-option-content checkmark-label-content">${answer}</p>
         </label>                      
         `;
-        // answerID++;
+
         answerName++;
   
         answerContent.push(answerOption)
       });
-    // if question type is Wahr-oder-Falsch then render this content
     }
+
+    // if question type is Wahr-oder-Falsch then render this content
     if(questionType === "Wahr-oder-Falsch") {
       const trueStatementID = answerOptionsArray[0].attributes['for'].value;
       const falseStatementID = answerOptionsArray[1].attributes['for'].value;
@@ -610,12 +665,10 @@ function openCommentSection(event) {
       </label>                      
       `;
       
-      // answerID = answerID + 2;
-
-      // push answer options into answerContent[]
       answerContent.push(answerOptions)
       
     }
+
     // join answer options into a single string for rendering
     let answerOptionsContent = answerContent.join("");
 
@@ -624,7 +677,6 @@ function openCommentSection(event) {
  
   function renderComments() {
     const commentsArray = [];
-
 
     correspondingPost.comments.forEach((comment) => {
       const postDate = new Date(comment.postDate);
@@ -696,9 +748,9 @@ function openCommentSection(event) {
             <div class="post-card-footer">
               <div class="flex-container align-center gap-0">
                 <button class="like-button user-feedback-button" title="Gefällt mir">
-                  <div class="button-icon animation-container" onclick="likePost(event)">
-                    <i class="material-icons">favorite_border</i>
-                    <div class="animation-item hidden">
+                  <div class="button-icon animation-container" data-post-id="${correspondingPost.postID}" onclick="likePost(event)">
+                    <i class="material-icons ${isPostLiked ? "hidden" : ""}">favorite_border</i>
+                    <div class="animation-item ${!isPostLiked ? "hidden" : ""}">
                       <i class="material-icons like-color">favorite</i>
                     </div>
                   </div>
@@ -713,9 +765,9 @@ function openCommentSection(event) {
                   <i class="material-icons" style="transform: scale(-100%, 100%);">reply</i>
                 </button>
                 <button class="save-post-button user-feedback-button" title="Beitrag speichern">
-                  <div class="button-icon animation-container" onclick="savePost(event)">
-                    <i class="material-icons">bookmark_border</i>
-                    <div class="animation-item hidden">
+                  <div class="button-icon animation-container" data-post-id="${correspondingPost.postID}" onclick="savePost(event)">
+                    <i class="material-icons ${isPostSaved ? "hidden" : ""}">bookmark_border</i>
+                    <div class="animation-item ${!isPostSaved ? "hidden" : ""}">
                       <i class="material-icons">bookmark</i>
                     </div>
                   </div>
@@ -749,22 +801,60 @@ function openCommentSection(event) {
   setCommentSectionHeight();
 
   // check if scrolling is enabled and switch between on and off
-    scrollingEnabled ? disableScroll() : enableScroll();
-    // set scrolling state to true or false
-    scrollingEnabled = !scrollingEnabled;
+  scrollingEnabled ? disableScroll() : enableScroll();
+  // set scrolling state to true or false
+  scrollingEnabled = !scrollingEnabled;
+}
+
+function toggleFavorite(list, id) {
+  const index = list.indexOf(id);
+
+  if (index === -1) {
+    list.push(id);       // add post to user's favoritePosts
+  } else {
+    list.splice(index, 1); // remove post from user's favoritePosts
+  }
+
+  return list;
 }
 
 // on save post button click trigger this function
 function savePost(event) {
   const saveButton = event.currentTarget;
   const animationItem = saveButton.children[1];
-  // const isPostLiked = likeButton.hasAttribute('data-liked');
 
-  saveButton.firstElementChild.classList.toggle('hidden');
-  animationItem.classList.toggle('hidden');
-  animationItem.firstElementChild.classList.toggle('icon-animation');
 
-  // changeLikeCount(counter, isPostLiked, likeButton);
+  const postID = saveButton.attributes['data-post-id'].value;
+  const postSavedByCurrentUser = currentUser.favoritePosts.includes(postID);
+  const isUserPost = currentUser.posts.includes(postID);
+  
+  // check if currentUser.favoritePosts includes this post
+  if(!postSavedByCurrentUser && !isUserPost) {
+    // display animation when button was clicked
+    saveButton.firstElementChild.classList.toggle('hidden');
+    animationItem.classList.toggle('hidden');
+    animationItem.firstElementChild.classList.add('icon-animation');
+
+    // add post to currentUser.favoritePosts[]
+    currentUser.favoritePosts = toggleFavorite(currentUser.favoritePosts, postID);
+    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+    
+  } 
+  // if saved remove from the list
+  else if(postSavedByCurrentUser) {
+    // display animation when button was clicked
+    saveButton.firstElementChild.classList.toggle('hidden');
+    animationItem.classList.toggle('hidden');
+    animationItem.firstElementChild.classList.remove('icon-animation');
+  
+    // add post to currentUser.favoritePosts[]
+    currentUser.favoritePosts = toggleFavorite(currentUser.favoritePosts, postID);
+    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+    
+  } else {
+    alertUser('Sie können Ihren eigenen Beitrag nicht speichern');
+  }
+  
 
 }
 
@@ -911,7 +1001,6 @@ postsFeed.addEventListener('submit', (e) => {
       return post.postID === postID;
     })
     
-    // console.log(correspondingPost)
   
     // evaluate user input and return feedback message and color
     const userFeedback = evaluateUserAnswers(correspondingPost, correspondingPost.questionType, entries, answerOptions);
@@ -955,6 +1044,7 @@ postsFeed.addEventListener('submit', (e) => {
     
     // add the new comment to the corresponding post  
     correspondingPost.comments.push(newUserComment);
+    sessionStorage.setItem('posts', JSON.stringify(posts));
     
     // create a new user-comment component
     let userCommentOutput = 
@@ -1050,10 +1140,10 @@ document.body.addEventListener('submit', (event) => {
         // check order type and sort by order type
         descendingOrder ? 
         sortedFeed = currentlyRenderedPosts.toSorted((a, b) => {
-          return b.postDate - a.postDate;
+          return new Date(b.postDate) - new Date(a.postDate);
         }) 
         : sortedFeed = currentlyRenderedPosts.toSorted((a, b) => {
-          return a.postDate - b.postDate;
+          return new Date(a.postDate) - new Date(b.postDate);
         });
         
         break;
