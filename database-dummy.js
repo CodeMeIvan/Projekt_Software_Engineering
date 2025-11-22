@@ -14,7 +14,7 @@
 let posts = [
   {
     postID: "post-1",
-    postDate: new Date("2025-11-11T23:20:00Z"),
+    postDate: new Date ("2025-11-11T23:20:00Z"),
     author: "Max Mustermann",
     degree: "B.Sc. Informatik",
     course: "Requirements Engineering",
@@ -118,6 +118,7 @@ const currentUser =
   favoritePosts: []
 };
 
+console.log(posts)
 
 if(sessionStorage.getItem('posts') === null) {
   sessionStorage.setItem("posts", JSON.stringify(posts));
@@ -134,7 +135,6 @@ function disableScroll() {
   
   window.onscroll = () => window.scrollTo(scrollLeft, scrollTop);
 };
-
 
 
 function enableScroll() {
@@ -276,7 +276,7 @@ function renderPostFeed(postsDataset) {
   postsDataset.forEach((post) => {
     const postID = post.postID;
     let answerName = 1;
-  
+    let postDate = new Date(post.postDate)
     
     function renderPostCardContent(questionType) {
       // options array
@@ -331,7 +331,7 @@ function renderPostFeed(postsDataset) {
           <div class="post-specifications">
             <div class="course-name link" data-course-name="${post.course}" title="Zum Kurs wechseln">k/${post.course}</div>
             <span>&#128900;</span>
-            <div class="post-date">${timeSince(post.postDate)}</div>
+            <div class="post-date">${timeSince(postDate)}</div>
             ${renderFollowButton(post)}
           </div>
           <div class="post-menu button-icon"><i class="material-icons">more_horiz</i></div>
@@ -347,7 +347,7 @@ function renderPostFeed(postsDataset) {
                 ${renderPostCardContent(post.questionType)}
               </div>
             </form>
-            <button form="post-answers-form${postAnswersFormID}" type="submit" class="submit-answer-button button-primary button--inactive">Auswerten</button>
+            <button form="post-answers-form${postAnswersFormID}" type="submit" data-post-id="${post.postID}" class="submit-answer-button button-primary button--inactive">Auswerten</button>
           </div>
           <div class="divider"></div>
           <div class="post-card-footer">
@@ -400,6 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const storagePosts = JSON.parse(sessionStorage.getItem('posts'));
     const newPostsExist = posts.length < storagePosts.length ? true : false;
     newPostsExist ? posts = storagePosts : null;
+    console.log(posts)
   }
   
   // render post feed for the home page
@@ -561,6 +562,7 @@ function openCommentSection(event) {
   const correspondingPost = posts.find((post) => {
     return post.postID === postID;
   })
+  const postDate = new Date(correspondingPost.postDate);
 
   const answerOptions = event.currentTarget.parentElement.parentElement.parentElement.previousElementSibling.previousElementSibling.firstElementChild.lastElementChild.children;
   const answerOptionsArray = Array.from(answerOptions);
@@ -625,6 +627,7 @@ function openCommentSection(event) {
 
 
     correspondingPost.comments.forEach((comment) => {
+      const postDate = new Date(comment.postDate);
       let userComment = 
       `
       <div class="user-comment">
@@ -633,7 +636,7 @@ function openCommentSection(event) {
           <div class="flex-container align-center gap-0">
             <h4 class="comment-username">${comment.username}</h4>
             <span>&#128900;</span>
-            <span class="comment-post-date">${timeSince(comment.postDate)}</span>
+            <span class="comment-post-date">${timeSince(postDate)}</span>
           </div>
           <button class="comment-menu button-icon"><i class="material-icons">more_vert</i></button>
         </div>
@@ -670,7 +673,7 @@ function openCommentSection(event) {
             <div class="post-specifications">
               <div class="course-name link" title="Zum Kurs wechseln">k/${correspondingPost.course}</div>
               <span>&#128900;</span>
-              <div class="post-date">${timeSince(correspondingPost.postDate)}</div>
+              <div class="post-date">${timeSince(postDate)}</div>
               ${renderFollowButton(correspondingPost)}
             </div>
             <div class="post-menu button-icon">
@@ -688,7 +691,7 @@ function openCommentSection(event) {
                   ${renderPostCardContent(correspondingPost.questionType)}
                 </div>
               </form>
-              <button form="post-answers-form" type="submit" class="submit-answer-button button-primary button--inactive">Auswerten</button>                        
+              <button form="post-answers-form" type="submit" data-post-id="${correspondingPost.postID}" class="submit-answer-button button-primary button--inactive">Auswerten</button>                        
             </div>                      
             <div class="post-card-footer">
               <div class="flex-container align-center gap-0">
@@ -890,7 +893,7 @@ postsFeed.addEventListener('submit', (e) => {
   const formData = new FormData(e.target);
   const entries = Object.fromEntries(formData.entries());
 
-
+  
   // when user submits his answer selection trigger this function
   if(e.submitter.matches('.submit-answer-button')) {    
     const postCardContent = e.target.parentElement;
@@ -898,14 +901,17 @@ postsFeed.addEventListener('submit', (e) => {
     // hide the submit button
     submitButton.classList.add('hidden');
     
-    const postQuestion = e.target.parentElement.parentElement.firstElementChild.firstElementChild.innerText;
+    // const postID = e.target.parentElement.parentElement.parentElement.id;
+    const postID = e.submitter.attributes['data-post-id'].value;
     const answerOptions = Array.from(e.target.children[1].children);
     
     // find the post that was submitted for evaluation
     const correspondingPost = posts.find((post) => {
-      return post.question === postQuestion;
+      
+      return post.postID === postID;
     })
     
+    // console.log(correspondingPost)
   
     // evaluate user input and return feedback message and color
     const userFeedback = evaluateUserAnswers(correspondingPost, correspondingPost.questionType, entries, answerOptions);
@@ -1095,3 +1101,37 @@ document.body.addEventListener('submit', (event) => {
     popoverContent.classList.toggle('hidden');
   }
 })
+
+function confirmCancellation(event) {
+  const isTargetModal = event.target.matches('.modal');
+  const isTargetRejectButton = event.target.matches('.reject-button');
+	const isTargetConfirmButton = event.target.matches('.confirm-button');
+  
+	// check if click target is modal or reject button then close the alert
+  isTargetModal || isTargetRejectButton ? event.currentTarget.remove() : null;
+	// check if history exists then go back 1 page else go to home page
+	if (isTargetConfirmButton && history.length > 1) {
+		history.go(-1);
+	} else if(isTargetConfirmButton) {
+		location.assign('home.html');
+	}
+}
+
+function closePage() {
+	const body = document.body;
+	const alert = 
+	`
+	<div class="modal" onclick="confirmCancellation(event)">
+		<div class="alert">
+			<p class="alert-message">Sind Sie sicher, dass Sie die Änderungen verwerfen wollen?</p>
+			<div class="flex-container gap-2">
+				<button type="button" class="reject-button button-tertiary">Nicht abbrechen</button>
+				<button type="button" class="confirm-button button-primary">Ja, abbrechen</button>
+			</div>
+		</div>
+	</div>
+	`;
+
+	body.insertAdjacentHTML('afterbegin', alert);
+
+}
