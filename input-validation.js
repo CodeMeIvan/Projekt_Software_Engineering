@@ -7,12 +7,13 @@ const users = [
   {username: "tutor", email: "tutor@iu.org", password: "tutor1234567"}
 ];
 
-const currentUser = 
+let currentUser = 
 {
   username: "Tester",
-  userPicture: randomizeBackground(),
+  userPicture: "crimson",
   followList : ['Requirements Engineering', "Wissenschaftliches Arbeiten", "Finanzierung"], // equals posts.course
   posts: ["post-1"], // equals posts.postID
+  likedPosts: [],
   comments: [],
   favoritePosts: []
 };

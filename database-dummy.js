@@ -111,13 +111,14 @@ let posts = [
 let currentUser = 
 {
   username: "Tester",
-  userPicture: randomizeBackground(),
+  userPicture: "crimson",
   followList : ['Requirements Engineering', "Wissenschaftliches Arbeiten", "Finanzierung"], // equals posts.course
   posts: ["post-1"], // equals posts.postID
   likedPosts: [],
   comments: [],
   favoritePosts: []
 };
+
 
 
 // check if session storage has posts then setup posts in the storage
